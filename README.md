@@ -3,25 +3,40 @@ Task 3 for CSC301 Full Stack Web Development
 
 TODO General information about the app
 
+## Dependencies
+
+This application requires Docker and Docker Compose to initialise and run the database. Please ensure these are installed.
+
+Application containers can be started and stopped through Docker Compose using npm by running in the root of this repo:
+
+```javascript
+npm start-docker // Starts all docker containers (restarts them if already started)
+npm stop-docker // Stops all docker containers
+```
+
+>**Note:** Docker containers are started and initialised alongside the application through `npm start`.
+
 ## Starting the Application
 
-The root folder controls installation and execution for both the server and client (the web app itself). To install and run both client and server simultaneously, open a terminal in the root of the assignment repo and run the following:
+The root folder controls installation and execution for both the server and client (the web app itself). To install and run both client and server simultaneously, open a terminal in the root of this repo and run the following:
 
 ```javascript
 npm install // Install all dependencies for both applications
-npm start // Start both applications
+npm start // Start both applications (including docker containers)
 ```
 
 This will install dependencies for, and start, both node JS applications. The assessment application can then be accessed at `http://localhost:5173`
 
-Each individual application can be run by running in the root of the assignment repo:
+Each individual application can be run by running in the root of this repo:
 
 ```javascript
 npm run server // Run the server
 npm run client // Run the client front-end
 ```
 
-Additionally, dependencies for each application can be installed by running in the root of the assignment repo:
+>**Note:** Docker containers will need to be started separately if using these commands.
+
+Additionally, dependencies for each application can be installed by running in the root of this repo:
 
 ```javascript
 npm run install-server // Install dependencies for the server
