@@ -17,4 +17,8 @@ app.get('/', (req: Request, res: Response) => {
 
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port} or http://127.0.0.1:${port}`)
+
+  dbController.getData().then(res => {
+    console.log(res.rows);
+  });
 });
