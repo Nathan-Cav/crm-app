@@ -3,6 +3,8 @@ import cors from "cors";
 // import fs from 'node:fs';
 // import path from 'node:path';
 
+import { dbController } from "./db/controller";
+
 const app: Express = express();
 const port = process.env.PORT || 3055;
 
