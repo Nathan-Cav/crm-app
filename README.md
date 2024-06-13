@@ -16,6 +16,20 @@ npm stop-docker // Stops all docker containers
 
 >**Note:** Docker containers are started and initialised alongside the application through `npm start`.
 
+### Environment Variables
+
+An .env file **MUST** be created in the root of this repo in order to specify database connection variables for the server. All environment variables are specified below.
+
+Only `DB_PASSWORD` is required in order for the application to work. All others will default to the values specified below.
+
+```javascript
+DB_HOST=localhost       // DB Hostname
+DB_PORT=5432            // DB Port
+DB_SERVER=server        // DB Schema Name
+DB_USER=postgres        // DB User
+DB_PASSWORD=<password>  // DB Password for User
+```
+
 ## Starting the Application
 
 The root folder controls installation and execution for both the server and client (the web app itself). To install and run both client and server simultaneously, open a terminal in the root of this repo and run the following:

@@ -2,17 +2,18 @@ version: '3.9'
 services:
   db:
     container_name: server_db
-    build: server
+    image: postgres:16
     restart: always
     shm_size: 128mb
     ports:
-      - 5432:5432
+      - ${DB_PORT:-5432}:${DB_PORT:-5432}
     volumes:
       - ./server/data:/var/lib/postgresql/data
+      - ./server/src/sql/db_init.sql:/docker-entrypoint-initdb.d/db_init.sql
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: server
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_SERVER:-server}
 
   adminer:
     container_name: db_console
