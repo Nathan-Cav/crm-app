@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-export function JobDisplay() {
+export function JobContainer() {
   // const [count, setCount] = createSignal(0);
 
   return (

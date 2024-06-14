@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js';
 
-import { ClientDisplay } from './ClientDisplay';
-import { JobDisplay } from './JobDisplay';
+import { ClientContainer } from './ClientContainer';
+import { JobContainer } from './JobContainer';
 
 export function DashboardDisplay() {
   // const [count, setCount] = createSignal(0);

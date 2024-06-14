@@ -1,6 +1,6 @@
 import { createSignal } from 'solid-js';
 
-export function ClientDisplay() {
+export function ClientContainer() {
   // const [count, setCount] = createSignal(0);
 
   return (
