@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@solidjs/router": "^0.13.5",
+    "open-props": "^1.7.4",
     "solid-js": "^1.8.15"
   },
   "devDependencies": {
