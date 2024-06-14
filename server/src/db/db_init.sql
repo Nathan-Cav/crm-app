@@ -13,7 +13,8 @@ CREATE TYPE client_contact AS (
 CREATE TABLE clients (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     company_name VARCHAR,
-    abn VARCHAR,
+    trading_as VARCHAR,
+    abn VARCHAR(11),
     active BOOLEAN,
     address VARCHAR,
     suburb VARCHAR,
@@ -40,6 +41,7 @@ CREATE TABLE jobs (
 -- Insert Placeholder Sample Data (based on mock file)
 INSERT INTO clients (
     company_name,
+    trading_as,
     abn,
     active,
     address,
@@ -50,7 +52,8 @@ INSERT INTO clients (
     comments
 ) VALUES (
     'Organisation Pty Ltd',
-    '1234567825',
+    'Business Service Consulting',
+    '12345678251',
     TRUE,
     '1 Moreton Parade',
     'Petrie',
@@ -61,6 +64,19 @@ INSERT INTO clients (
         CAST(('Other Person', 'COO', '0411 111 111', 'other@organisation.com.au', 'Some other person. Lorem Ipsum is simply dummy text of the printing and typesetting industry.') AS client_contact)
     ],
     'All servers are onsite. Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+), (
+    'Business Pty Ltd',
+    'Placeholder Resorts',
+    '13567827532',
+    TRUE,
+    '90 Sippy Downs Drive',
+    'Sippy Downs',
+    'QLD',
+    4556,
+    ARRAY [
+        CAST(('Jimmy McPerson', 'CEO', '0476 543 210', 'jim@business.com.au', NULL) AS client_contact)
+    ],
+    NULL
 );
 
 INSERT INTO jobs (

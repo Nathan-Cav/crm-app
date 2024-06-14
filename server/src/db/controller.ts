@@ -15,6 +15,7 @@ export let dbController = {
             `SELECT
                 id,
                 company_name,
+                trading_as,
                 abn,
                 active,
                 address,
@@ -29,6 +30,7 @@ export let dbController = {
             `SELECT
                 id,
                 company_name,
+                trading_as,
                 abn,
                 active,
                 address,
@@ -43,12 +45,12 @@ export let dbController = {
         ));
     },
 
-    getJobs: async(client_id = "") => {
-        const clientFilter = (client_id !== "")
-            ? "WHERE c.id = $1"
+    getJobs: async(job_id = "") => {
+        const filterJob = (job_id !== "")
+            ? "WHERE j.id = $1"
             : "";
-        const paramArray = (client_id !== "")
-            ? [client_id]
+        const params = (job_id !== "")
+            ? [job_id]
             : [];
 
         return (await dbConnection.query(
@@ -56,6 +58,7 @@ export let dbController = {
                 j.id,
                 j.client_id,
                 c.company_name,
+                c.trading_as,
                 c.abn,
                 c.active AS company_active,
                 j.job_number,
@@ -66,20 +69,27 @@ export let dbController = {
                 j.amount_paid
              FROM jobs j
              INNER JOIN clients c ON j.client_id = c.id
-             ${clientFilter}
+             ${filterJob}
              ORDER BY job_number;`,
-             paramArray
+             params
         ));
     },
 
-    getJob: async(job_id: string) => {
+    getJobsForClient: async(client_id: string) => {
         return (await dbConnection.query(
-            `SELECT *
-             FROM jobs j
-             INNER JOIN clients c ON j.client_id = c.id
-             WHERE id = $1
+            `SELECT
+                id,
+                client_id,
+                job_number,
+                status,
+                description,
+                comments,
+                amount_due,
+                amount_paid
+             FROM jobs
+             WHERE client_id = $1
              ORDER BY job_number;`,
-            [job_id]
+             [client_id]
         ));
     }
 }

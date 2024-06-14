@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
-import { api_functions } from "./api_utils";
+import { api_functions } from "./api_functions";
 
 const app: Express = express();
 const port = process.env.PORT || 3055;
@@ -8,51 +8,47 @@ const port = process.env.PORT || 3055;
 app.use(cors());
 
 /* GET ENDPOINTS */
+/* ------------- */
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Congratulations! You have successfully started the server');
 });
 
+// List all clients
 app.get('/clients', async (req: Request, res: Response) => {
-  api_functions.api_clients()
+  api_functions.apiGetClients()
     .then(ret => res.json(ret))
-    .catch(err => res.status(err.status).json(err.message));
+    .catch(err => res.status(err.status || 500).json(err.message));
+});
+// Get details for a single client
+app.get('/clients/:clientId', (req: Request, res: Response) =>{
+  api_functions.apiGetClient(req.params.clientId)
+    .then(ret => res.json(ret))
+    .catch(err => res.status(err.status || 500).json(err.message));
 });
 
-app.get('/client/:clientId', (req: Request, res: Response) =>{
-  api_functions.api_client(req.params.clientId)
-    .then(ret => res.json(ret))
-    .catch(err => res.status(err.status).json(err.message));
-});
-app.get('/client', (req: Request, res: Response) =>
-  res.status(400).json({ error: "Client ID must be specified in request" })
-);
 
-app.get('/jobs/:clientId', (req: Request, res: Response) =>{
-  api_functions.api_jobs(req.params.clientId)
-    .then(ret => res.json(ret))
-    .catch(err => res.status(err.status).json(err.message));
-});
+// List all jobs
 app.get('/jobs', async (req: Request, res: Response) => {
-  api_functions.api_jobs()
+  api_functions.apiGetAllJobs()
     .then(ret => res.json(ret))
-    .catch(err => res.status(err.status).json(err.message));
+    .catch(err => res.status(err.status || 500).json(err.message));
+});
+// Get details for a single job
+app.get('/jobs/:jobId', (req: Request, res: Response) =>{
+  api_functions.apiGetJob(req.params.jobId)
+    .then(ret => res.json(ret))
+    .catch(err => res.status(err.status || 500).json(err.message));
 });
 
-app.get('/job/:jobId', (req: Request, res: Response) =>{
-  api_functions.api_job(req.params.jobId)
-    .then(ret => res.json(ret))
-    .catch(err => res.status(err.status).json(err.message));
-});
-app.get('/job', (req: Request, res: Response) =>
-  res.status(400).json({ error: "Job ID must be specified" })
-);
 
 /* POST ENDPOINTS */
+/* -------------- */
 
 
 
 /* DELETE ENDPOINTS */
+/* ---------------- */
 
 
 
