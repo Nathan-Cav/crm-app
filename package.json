@@ -4,7 +4,7 @@
   "description": "Aggregate file for web-app, combining server and client modules",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test-server && npm run test-client",
     "install": "npm run install-server && npm run install-client",
     "start": "npm run start-docker && npm run server& npm run client& wait",
     "build": "npm run build-server && npm run build-client",
@@ -15,7 +15,9 @@
     "install-server": "cd ./server && npm install",
     "install-client": "cd ./client && npm install",
     "build-server": "cd ./server && npm run build",
-    "build-client": "cd ./client && npm run build"
+    "build-client": "cd ./client && npm run build",
+    "test-server": "cd ./server && npm test",
+    "test-client": "cd ./client && npm test"
   },
   "repository": {
     "type": "git",

@@ -16,6 +16,7 @@ function parseJobs(jobs: any[]) {
     return jobs.map(job => {
         job.amount_due = parseFloat(job.amount_due);
         job.amount_paid = parseFloat(job.amount_paid);
+        job.total_outstanding = (job.amount_due - job.amount_paid)
         return job;
     });
 }
@@ -32,21 +33,21 @@ export let api_functions = {
                 console.error(error);
                 throw std_error.json();
             });
+
         return clientRes;
     },
 
     apiGetAllJobs: async () => {
         const jobRes = await dbController.getJobs()
-            .then(response => response.rows || [])
+            .then(response => parseJobs(response.rows) || [])
             .catch(error => {
                 // Handle Error
                 console.error(error);
                 throw std_error.json();
             });
 
-        return parseJobs(jobRes);
+        return jobRes;
     },
-
 
     apiGetClient: async (clientId: string) => {
         // Check the ID is valid
@@ -74,18 +75,23 @@ export let api_functions = {
 
         // Retrieve all jobs associated with a given client
         const jobRes = await dbController.getJobsForClient(clientId)
-            .then(response => response.rows || [])
+            .then(response => parseJobs(response.rows) || [])
             .catch(error => {
                 // Handle Error
                 console.error(error);
                 throw std_error.json();
             });
 
+        // Work out the total amount outstanding from all jobs
+        const totalOutstanding = jobRes
+            .filter(job => job.status !== "In Progress")
+            .map(job => job.total_outstanding)
+            .reduce((partialSum, a) => partialSum + a, 0);
+
         // Combine the two arrays and transform data into the response object
         let response = clientRes[0];
-        response.jobs = parseJobs(jobRes);
-
-        // TODO Create total_outstanding
+        response.total_outstanding = totalOutstanding;
+        response.jobs = jobRes;
 
         return response;
     },
@@ -101,7 +107,7 @@ export let api_functions = {
                 if ((response.rowCount || 0) <= 0) {
                     throw new Error('Not Found');
                 }
-                return response.rows;
+                return parseJobs(response.rows);
             })
             .catch(error => {
                 // Handle Error
@@ -112,6 +118,6 @@ export let api_functions = {
                 throw std_error.json();
             });
 
-        return parseJobs(jobRes)[0];
+        return jobRes[0];
     }
 }
