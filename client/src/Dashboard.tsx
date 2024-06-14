@@ -5,9 +5,14 @@ import { DashboardDisplay } from './components/DashboardDisplay';
 function Dashboard() {
   // const add = (window.location.href.split("/").pop() === "add");
 
-  const [add, setAdd] = createSignal(false);
+  const [add, setAdd] = createSignal(
+    false
+    // (window.location.href.split("/").pop() === "add")
+  );
 
-  const goToAdd = () => { setAdd(!add()) };
+  const goToAdd = () => {
+    setAdd(!add())
+  };
 
   return (
     <>
@@ -24,7 +29,6 @@ function Dashboard() {
         </Show>
 
       </div>
-
     </>
   );
 }
