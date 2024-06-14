@@ -85,6 +85,8 @@ export let api_functions = {
         let response = clientRes[0];
         response.jobs = parseJobs(jobRes);
 
+        // TODO Create total_outstanding
+
         return response;
     },
 
