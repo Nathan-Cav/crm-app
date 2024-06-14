@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool, PoolClient } from 'pg';
 
 const pool = new Pool({
   host:       process.env.DB_HOST || "localhost",       // Postgres ip address[s] or domain name[s]
@@ -9,8 +9,20 @@ const pool = new Pool({
 });
 
 export const dbConnection = {
-  query: (sql: string, params: any[] = []) => pool.query(sql, params),
-  realQuery: (sql: string, params: any[]) => {
-    // TODO
-  }
+  query: (
+    sql: string,
+    params: any[] = []
+  ) => pool.query(sql, params),
+
+  beginTransaction: () => pool.connect(),
+
+  appendTransaction: (
+    client: PoolClient,
+    sql: string,
+    params: any[] = []
+  ) => client.query(sql, params),
+
+  endTransaction: (
+    client: PoolClient
+  ) => client.release()
 }

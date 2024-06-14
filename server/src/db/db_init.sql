@@ -4,7 +4,7 @@
 CREATE TYPE client_contact AS (
     name VARCHAR,
     position VARCHAR,
-    phoneNumber VARCHAR,
+    phone_number VARCHAR,
     email VARCHAR,
     comments TEXT
 );
