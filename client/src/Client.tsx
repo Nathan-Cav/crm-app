@@ -1,7 +1,9 @@
 import { createSignal } from 'solid-js';
 import { useParams } from "@solidjs/router";
 
-function ClientDisplay() {
+import AddEditJob from './components/AddEditJob';
+
+export default function Client() {
   const params = useParams();
 
   const goBack = () => { location.href = '/'; };
@@ -23,5 +25,3 @@ function ClientDisplay() {
     </>
   );
 }
-
-export default ClientDisplay;

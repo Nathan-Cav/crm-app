@@ -1,0 +1,24 @@
+.dashboard-container {
+    padding: var(--size-fluid-2);
+}
+
+.dashboard-container nav {
+    display: flex;
+    /* justify-content: space-around; */
+}
+
+.dashboard-container nav a {
+    width: 100%;
+    text-align: center;
+    color: var(--text-2);
+    text-decoration: none;
+    border: var(--border-size-1) solid var(--surface-3);
+    padding: var(--size-3);
+}
+.dashboard-container nav a:hover {
+    background-color: var(--surface-2);
+}
+
+.dashboard-container nav .active {
+    border-bottom: var(--border-size-2) solid var(--lime-8);
+}

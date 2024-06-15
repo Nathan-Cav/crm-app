@@ -1,8 +1,9 @@
 import { createSignal, Show } from 'solid-js';
 
-import { DashboardDisplay } from './components/DashboardDisplay';
+import DashboardDisplay from './components/DashboardDisplay';
+import AddClient from './components/AddClient';
 
-function Dashboard() {
+export default function Dashboard() {
   // const add = (window.location.href.split("/").pop() === "add");
 
   const [add, setAdd] = createSignal(
@@ -25,12 +26,10 @@ function Dashboard() {
         <DashboardDisplay />
 
         <Show when={add()}>
-          Stuff is being added!!!
+          <AddClient />
         </Show>
 
       </div>
     </>
   );
 }
-
-export default Dashboard;
