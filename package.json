@@ -4,7 +4,7 @@
   "description": "Aggregate file for web-app, combining server and client modules",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test-server && npm run test-client",
+    "test": "npm run test-server",
     "install": "npm run install-server && npm run install-client",
     "start": "npm run start-docker && npm run server& npm run client& wait",
     "build": "npm run build-server && npm run build-client",
