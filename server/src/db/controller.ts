@@ -7,7 +7,7 @@ import { dbConnection } from "./connection";
 
 /**
  * The database controller object.
- * Can be used by calling db.create(data), db.update(data), db.delete(id) etc.
+ * Can be used by calling dbController.getClients(), dbController.getClient(client_id), etc.
  */
 export let dbController = {
     getClients: async() => {
@@ -66,7 +66,8 @@ export let dbController = {
                 j.description,
                 j.comments,
                 j.amount_due,
-                j.amount_paid
+                j.amount_paid,
+                (j.amount_due - j.amount_paid) AS total_outstanding
              FROM jobs j
              INNER JOIN clients c ON j.client_id = c.id
              ${filterJob}
@@ -79,13 +80,13 @@ export let dbController = {
         return (await dbConnection.query(
             `SELECT
                 id,
-                client_id,
                 job_number,
                 status,
                 description,
                 comments,
                 amount_due,
-                amount_paid
+                amount_paid,
+                (amount_due - amount_paid) AS total_outstanding
              FROM jobs
              WHERE client_id = $1
              ORDER BY job_number;`,

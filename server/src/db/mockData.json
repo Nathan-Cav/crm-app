@@ -1,26 +1,27 @@
 {
     "id": "33ed8cd8-c705-4d61-b7d4-f28159824c6f",
-    "companyName": "Organisation Pty Ltd",
-    "abn": "1234567825",
+    "company_name": "Organisation Pty Ltd",
+    "trading_as": "Business Service Consulting",
+    "abn": "12345678251",
     "active": true,
     "address": "1 Moreton Parade",
     "suburb": "Petrie",
     "state": "QLD",
     "postcode": "4502",
     "comments": "All servers are onsite. Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "totalOutstanding": 454.32,
-    "clientContacts": [
+    "total_outstanding": 454.32,
+    "client_contacts": [
         {
             "name": "John Snow",
             "position": "CEO",
-            "phoneNumber": "0412 345 789",
+            "phone_number": "0412 345 789",
             "email": "john@organisation.com.au",
             "comments": "Main point of contact for everything."
         },
         {
             "name": "Other Person",
             "position": "COO",
-            "phoneNumber": "0411 111 111",
+            "phone_number": "0411 111 111",
             "email": "other@organisation.com.au",
             "comments": "Some other person. Lorem Ipsum is simply dummy text of the printing and typesetting industry."
         }
@@ -28,48 +29,53 @@
     "jobs": [
         {
             "id": "eea06942-21c4-4486-8289-e0f4b030c6d6",
-            "jobNumber": 1,
+            "job_number": 1,
             "status": "In Progress",
             "description": "Client asked about stuff. We went to their company and did stuff",
             "comments": "",
-            "amountDue": 0.00,
-            "amountPaid": 0.00
+            "amount_due": 0.00,
+            "amount_paid": 0.00,
+            "total_outstanding": 0.00
         },
         {
             "id": "3ba66333-a4be-405c-ae9c-0464f990ff23",
-            "jobNumber": 2,
+            "job_number": 2,
             "status": "Complete",
             "description": "Client asked about stuff. We went to their company and did stuff",
             "comments": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available.",
-            "amountDue": 520.42,
-            "amountPaid": 520.42
+            "amount_due": 520.42,
+            "amount_paid": 520.42,
+            "total_outstanding": 0.00
         },
         {
             "id": "bde90fe9-98a4-462b-a7a1-4fa63061e98e",
-            "jobNumber": 3,
+            "job_number": 3,
             "status": "Awaiting Payment",
             "description": "Client asked about stuff. We went to their company and did stuff",
             "comments": "",
-            "amountDue": 420.56,
-            "amountPaid": 150.00
+            "amount_due": 420.56,
+            "amount_paid": 150.00,
+            "total_outstanding": 270.56
         },
         {
             "id": "3cb54ed0-862f-4e82-b56d-6ad437839552",
-            "jobNumber": 4,
+            "job_number": 4,
             "status": "In Progress",
             "description": "Client asked about stuff. We went to their company and did stuff",
             "comments": "Some stuff still to be done on this one",
-            "amountDue": 1200.01,
-            "amountPaid": 0.00
+            "amount_due": 1200.01,
+            "amount_paid": 0.00,
+            "total_outstanding": 1200.01
         },
         {
             "id": "429c1dc7-2ca6-4565-bd8d-03f33f2a4206",
-            "jobNumber": 5,
+            "job_number": 5,
             "status": "In Progress",
             "description": "Client asked about stuff. We went to their company and did stuff",
             "comments": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            "amountDue": 0.00,
-            "amountPaid": 0.00
+            "amount_due": 0.00,
+            "amount_paid": 0.00,
+            "total_outstanding": 0.00
         }
     ]
 }

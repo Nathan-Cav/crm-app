@@ -16,7 +16,7 @@ function parseJobs(jobs: any[]) {
     return jobs.map(job => {
         job.amount_due = parseFloat(job.amount_due);
         job.amount_paid = parseFloat(job.amount_paid);
-        job.total_outstanding = (job.amount_due - job.amount_paid)
+        job.total_outstanding = parseFloat(job.total_outstanding)
         return job;
     });
 }
