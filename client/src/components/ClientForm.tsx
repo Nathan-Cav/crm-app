@@ -61,6 +61,7 @@ export default function ClientForm(props: {
               <label for="state">
                 <span>State</span>
                 <select id='state' disabled={!props.editable} value={props.client.state}>
+                  <option value="" hidden={true} disabled={true}>Please Select a State</option>
                   <option value="QLD">Queensland</option>
                   <option value="NSW">New South Wales</option>
                   <option value="ACT">Australian Capital Territory</option>

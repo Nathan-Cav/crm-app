@@ -1,9 +1,9 @@
 .job-listing-container {
-    margin: var(--size-fluid-1) 0;
+    margin: var(--size-fluid-3) 0;
 }
 
 .job-listing-container .none-found {
-    margin: var(--size-fluid-2) auto;
+    margin: var(--size-fluid-3) auto;
     width: max-content;
 }
 
