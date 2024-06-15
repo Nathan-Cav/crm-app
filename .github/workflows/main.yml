@@ -10,7 +10,7 @@ jobs:
   build_website_files:
     name: Build Files
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node
@@ -20,15 +20,12 @@ jobs:
 
       - name: Install Server Dependencies
         run: npm run install-server
-        
+
+      - name: Change DB Controller Over to Mock Controller
+        run: sed -i -e 's/.\/db\/controller/.\/db\/mock_controller/g' ./server/src/api_functions.ts
+
       - name: Build Server
         run: npm run build-server
 
-      - name: Replace DB Controller with Mock
-        run: mv ./server/dist/src/db/mock_controller.js ./server/dist/src/db/controller.js
-
-      - name: Check Directory Content
-        run: cd ./server/dist/src/db/ && ls -al
-
-      # - name: Run Tests
-      #   run: npm test
+      - name: Run Server Tests
+        run: npm run test-server
