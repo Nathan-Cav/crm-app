@@ -29,7 +29,7 @@ export default function ClientDashboard() {
           <label for='filter_inactive'><input type='checkbox' id='filter_inactive' onChange={(e) => setFilterInactive(e.target.checked)} /> <span>Show Inactive</span></label>
         </div>
 
-        <div class='client-container'>
+        <div class='clients-container'>
           <For each={clients().filter((client: { active: boolean; }) => client.active || filterInactive())}>
             {(client) =>
               <A class='button-wrapper' href={`/client/${client.id}`}>

@@ -1,10 +1,10 @@
-import { createResource, createSignal } from 'solid-js';
+import { createResource, createSignal, For, Show } from 'solid-js';
 import { A, useParams } from "@solidjs/router";
 
-import AddEditJob from './components/AddEditJob';
 import ResourceHandler from './components/ResourceHandler';
 
 import "./styles/Client.css";
+import ClientForm from './components/ClientForm';
 
 // API Constants
 const protocol = "http";
@@ -24,30 +24,40 @@ export default function Client() {
   const params = useParams();
   const [client] = createResource(params.clientId, fetchClient);
 
+  const [beingEdited, setBeingEdited] = createSignal(false);
+  const [editText, setEditText] = createSignal("Edit Client");
+
+  const editClient = () => {
+    if (beingEdited()) {
+      // Then form is being saved
+      setEditText("Edit Client")
+    }
+    else {
+      // The form is being edited
+      setEditText("Save Changes")
+
+    }
+    setBeingEdited(!beingEdited());
+  }
+
   return (
     <>
       <div class="app-display">
-        <header>
-          <div class='back-container'>
-            <A class='button-wrapper' href="/"><button type='button'>&lt;</button></A>
-            <h2>Client Stuff</h2>
-          </div>
-        </header>
-
         <ResourceHandler loading={client.loading} error={client.error}>
-          <div>{JSON.stringify(client(), null, 2)}</div>
-          <div class='client-container'>
-            {/* <For each={client()}>
-            {(client) =>
-              <div>
-                <A href={`/client/${client.id}`}>{client.trading_as} ({client.company_name})</A>
-              </div>
-            }
-          </For> */}
-          </div>
-        </ResourceHandler>
+          <header>
+            <div class='heading-button-container'>
+              <A class='button-wrapper' href="/"><button type='button'>&lt;</button></A>
+              <h2>{client().trading_as} ({client().company_name})</h2>
+            </div>
+            <button type='button' onClick={editClient}>{editText()}</button>
+          </header>
 
-      </div>
+          <div class='client-container'>
+            <ClientForm client={client()} editable={beingEdited()} />
+          </div>
+
+        </ResourceHandler >
+      </div >
     </>
   );
 }

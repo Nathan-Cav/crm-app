@@ -29,11 +29,6 @@ header h2 {
   color: var(--text-2);
 }
 
-header .back-container {
-  display: flex;
-  gap: var(--size-3);
-}
-
 .button-wrapper {
   display: flex;
   color: initial;

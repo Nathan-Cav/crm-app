@@ -1,0 +1,12 @@
+header h2 {
+    max-inline-size: none;
+}
+
+.client-container {
+    padding: 0 var(--size-fluid-2);
+}
+
+.heading-button-container {
+    display: flex;
+    gap: var(--size-3);
+}

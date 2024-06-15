@@ -9,39 +9,39 @@
     color: var(--text-2)
 }
 
-.client-container {
+.clients-container {
     display: flex;
     gap: var(--size-fluid-2);
     margin: var(--size-fluid-1) 0;
     flex-wrap: wrap;
 }
 
-.client-container .client {
+.clients-container .client {
     max-width: var(--size-14);
     border: var(--border-size-1) solid var(--surface-4);
     border-radius: var(--radius-2);
     padding: var(--size-fluid-1);
     box-shadow: var(--shadow-2);
 }
-.client-container .client:hover {
+.clients-container .client:hover {
     background-color: var(--surface-2);
 }
 
-.client-container .client div {
+.clients-container .client div {
     margin: var(--size-2) 0;
 }
 
-.client-container .client .abn {
+.clients-container .client .abn {
     color: var(--text-2);
     font-style: italic;
     font-size: var(--font-size-0);
 }
 
-.client-container .client.inactive {
+.clients-container .client.inactive {
     color: var(--text-2);
     background-color: var(--surface-3);
     box-shadow: var(--shadow-1);
 }
-.client-container .client.inactive:hover {
+.clients-container .client.inactive:hover {
     background-color: var(--surface-4);
 }

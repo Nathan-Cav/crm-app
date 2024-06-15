@@ -1,0 +1,80 @@
+.heading-button-container {
+    display: flex;
+    gap: var(--size-3);
+}
+
+.client-form,
+.client-form .client-fields,
+.contact-container,
+.contact-container table {
+    margin: var(--size-fluid-2) 0;
+}
+
+.client-jobs-container {
+    border-top: var(--border-size-1) solid var(--surface-4);
+    margin: var(--size-fluid-3) 0;
+    padding: var(--size-fluid-3) 0;
+}
+
+.contact-container .none-found {
+    margin: var(--size-fluid-1) 0;
+}
+
+.contact-container input {
+    text-align: center;
+}
+
+.contact-container .contact-name,
+.contact-container .contact-pos {
+    width: var(--size-12);
+    margin: var(--size-1) 0;
+}
+
+.contact-container .contact-name:disabled,
+.contact-container .contact-pos:disabled {
+    margin: var(--size-00);
+}
+
+.contact-container .contact-email {
+    width: var(--size-13);
+}
+
+.contact-container .contact-phone {
+    width: var(--size-11);
+}
+
+.contact-container .contact-comments {
+    width: var(--size-14);
+    height: var(--size-10);
+}
+
+.client-form input:disabled,
+.client-form select:disabled,
+.client-form textarea:disabled {
+    background-color: transparent;
+    resize: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.client-fields .client-field label {
+    display: flex;
+    align-items: baseline;
+    gap: var(--size-fluid-1);
+    margin: var(--size-2) var(--size-fluid-1);
+}
+
+.client-fields .client-field span {
+    font-weight: bold;
+    width: var(--size-fluid-7);
+}
+
+.client-fields .client-field input,
+.client-fields .client-field select {
+    width: var(--size-fluid-8);
+}
+
+.client-fields .client-field textarea {
+    width: var(--size-fluid-10);
+    height: var(--size-fluid-5);
+}

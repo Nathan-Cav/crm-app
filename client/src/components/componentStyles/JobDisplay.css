@@ -2,7 +2,13 @@
     margin: var(--size-fluid-1) 0;
 }
 
+.job-listing-container .none-found {
+    margin: var(--size-fluid-2) auto;
+    width: max-content;
+}
+
 .job-listing-container .job-table {
+    color: var(--text-2);
     border-radius: var(--radius-3);
     border-spacing: 0;
     border: none;
@@ -11,7 +17,7 @@
 
 .job-listing-container .job-table td {
     border-radius: 0 !important;
-    padding: var(--size-fluid-2) var(--size-fluid-2);
+    padding: var(--size-fluid-1) var(--size-fluid-2);
 }
 
 .job-listing-container .job-table th {
