@@ -1,0 +1,76 @@
+.job-listing-container {
+    margin: var(--size-fluid-1) 0;
+}
+
+.job-listing-container .job-table {
+    border-radius: var(--radius-3);
+    border-spacing: 0;
+    border: none;
+    width: 100%;
+}
+
+.job-listing-container .job-table td {
+    border-radius: 0 !important;
+    padding: var(--size-fluid-2) var(--size-fluid-2);
+}
+
+.job-listing-container .job-table th {
+    background-color: var(--surface-3);
+    padding: var(--size-fluid-2) var(--size-fluid-2);
+}
+
+
+.job-listing-container .job-table hr {
+    margin-block: var(--size-1);
+}
+
+.job-listing-container .job-table .comment-cell {
+    vertical-align: top;
+}
+
+.job-listing-container .job-table .comment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+    gap: var(--size-1);
+}
+
+.job-listing-container .job-table .h6 {
+    font-size: var(--font-size-2);
+    font-weight: bold;
+}
+
+.job-listing-container .job-table .status-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--size-1);
+}
+
+.job-listing-container .job-table .dom {
+    font-weight: bold;
+}
+
+.job-listing-container .job-table .outstanding {
+    font-style: italic;
+}
+
+.job-listing-container .job-table .sub {
+    color: var(--text-2);
+    font-size: var(--font-size-0);
+    max-width: var(--size-fluid-8);
+}
+
+.job-listing-container .job-table .job-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-fluid-1) 0;
+    align-items: center;
+}
+
+.job-listing-container .job-table a,
+.job-listing-container .job-table button {
+    width: 100%;
+}

@@ -13,6 +13,7 @@ render(() => (
     <Router>
         <Route path="/" component={Dashboard} />
         <Route path="/jobs" component={Dashboard} />
+        <Route path="/jobs/:jobId" component={Dashboard} />
         <Route path="/client/:clientId" component={Client} />
         <Route path="*paramName" component={() => <Navigate href={"/"} />} />
     </Router>

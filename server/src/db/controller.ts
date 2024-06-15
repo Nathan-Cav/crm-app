@@ -72,7 +72,7 @@ export let dbController = {
              FROM jobs j
              INNER JOIN clients c ON j.client_id = c.id
              ${filterJob}
-             ORDER BY job_number;`,
+             ORDER BY (status = 'Awaiting Payment') DESC, status DESC, job_number DESC;`,
              params
         ));
     },
@@ -90,7 +90,7 @@ export let dbController = {
                 (amount_due - amount_paid) AS total_outstanding
              FROM jobs
              WHERE client_id = $1
-             ORDER BY job_number;`,
+             ORDER BY (status = 'Awaiting Payment') DESC, status DESC, job_number DESC;`,
              [client_id]
         ));
     }

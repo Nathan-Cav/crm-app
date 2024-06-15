@@ -12,7 +12,7 @@ export default function DashboardDisplay() {
   const [currentDisplay, setCurrentDisplay] = createSignal("clients");
 
   createEffect(() => {
-    if (location.pathname === "/jobs") {
+    if (location.pathname.indexOf("/jobs") !== -1) {
       setCurrentDisplay("jobs")
     }
     else {
