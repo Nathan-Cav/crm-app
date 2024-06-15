@@ -24,6 +24,7 @@ export let dbController = {
             address: data.address,
             suburb: data.suburb,
             state: data.state,
+            postcode: data.postcode
         }];
 
         return {

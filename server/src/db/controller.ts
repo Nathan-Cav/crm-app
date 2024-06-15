@@ -20,7 +20,8 @@ export let dbController = {
                 active,
                 address,
                 suburb,
-                state
+                state,
+                postcode
              FROM clients;`
         ));
     },
@@ -48,7 +49,7 @@ export let dbController = {
     getJobs: async(job_id = "") => {
         const filterJob = (job_id !== "")
             ? "WHERE j.id = $1"
-            : "";
+            : "WHERE c.active = TRUE";
         const params = (job_id !== "")
             ? [job_id]
             : [];
@@ -60,7 +61,6 @@ export let dbController = {
                 c.company_name,
                 c.trading_as,
                 c.abn,
-                c.active AS company_active,
                 j.job_number,
                 j.status,
                 j.description,

@@ -33,3 +33,9 @@ header .back-container {
   display: flex;
   gap: var(--size-3);
 }
+
+.button-wrapper {
+  display: flex;
+  color: initial;
+  text-decoration: none;
+}

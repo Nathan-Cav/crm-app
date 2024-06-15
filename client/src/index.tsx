@@ -2,7 +2,7 @@
 import { render } from 'solid-js/web';
 import { Navigate, Route, Router } from "@solidjs/router";
 
-import './index.css';
+import './styles/index.css';
 
 import Dashboard from './Dashboard';
 import Client from './Client';
