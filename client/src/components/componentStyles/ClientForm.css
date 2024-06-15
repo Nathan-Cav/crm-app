@@ -51,6 +51,7 @@
 .client-form input:disabled,
 .client-form select:disabled,
 .client-form textarea:disabled {
+    cursor: default;
     background-color: transparent;
     resize: none;
     -moz-appearance: none;
@@ -72,6 +73,7 @@
 .client-fields .client-field input,
 .client-fields .client-field select {
     width: var(--size-fluid-8);
+    padding-left: var(--size-2);
 }
 
 .client-fields .client-field textarea {

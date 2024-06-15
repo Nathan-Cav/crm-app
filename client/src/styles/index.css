@@ -22,8 +22,12 @@ header {
   justify-content: space-between;
   gap: var(--size-fluid-1);
   border-bottom: var(--border-size-1) solid var(--surface-4);
-  padding: var(--size-4) var(--size-2);
+  padding: var(--size-5) var(--size-2);
   box-shadow: var(--shadow-1);
+}
+
+button {
+  color: var(--text-1);
 }
 
 header h2 {

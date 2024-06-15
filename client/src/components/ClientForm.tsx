@@ -5,7 +5,9 @@ import JobDisplay from './JobDisplay';
 import "./componentStyles/ClientForm.css"
 
 export default function ClientForm(props: {
-  editable: boolean; client: { trading_as: string; company_name: string; abn: string; active: boolean; address: string; suburb: string; state: string; postcode: string; comments: string; client_contacts: any[]; jobs: any; };
+  editable: boolean; client: {
+    total_outstanding: number; trading_as: string; company_name: string; abn: string; active: boolean; address: string; suburb: string; state: string; postcode: string; comments: string; client_contacts: any[]; jobs: any;
+  };
 }) {
   return (
     <>
@@ -14,7 +16,6 @@ export default function ClientForm(props: {
           <h2>Business Details</h2>
 
           <div class='client-fields'>
-
             <Show when={props.editable}>
               <div class="client-field">
                 <label for="trading_as">
@@ -31,18 +32,26 @@ export default function ClientForm(props: {
             </Show>
 
             <div class="client-field">
-              <label for="company_name">
-                <span>ABN</span>
-                <input type='text' disabled={!props.editable} value={props.client.abn} />
-              </label>
-            </div>
-            <div class="client-field">
               <label for="active">
-                <span>Active</span>
+                <span>Client Status</span>
                 <select id='active' disabled={!props.editable} value={(props.client.active) ? "true" : "false"}>
                   <option value="true">Active</option>
                   <option value="false">Inactive</option>
                 </select>
+              </label>
+            </div>
+            <Show when={!props.editable}>
+              <div class="client-field">
+                <label for="total_outstanding">
+                  <span>Total Outstanding</span>
+                  <input type='text' id='total_outstanding' disabled={true} value={`$${props.client.total_outstanding.toFixed(2)}`} />
+                </label>
+              </div>
+            </Show>
+            <div class="client-field">
+              <label for="company_name">
+                <span>ABN</span>
+                <input type='text' disabled={!props.editable} value={props.client.abn} />
               </label>
             </div>
             <div class="client-field">
@@ -106,7 +115,7 @@ export default function ClientForm(props: {
                       {(contact) =>
                         <tr>
                           <td>
-                            <input type='text' class='contact-name' placeholder='Name' disabled={!props.editable} value={contact.name} /><br/>
+                            <input type='text' class='contact-name' placeholder='Name' disabled={!props.editable} value={contact.name} /><br />
                             <input type='text' class='contact-pos' placeholder='Job Position' disabled={!props.editable} value={contact.position} />
                           </td>
                           <td><input type='email' class='contact-email' disabled={!props.editable} value={contact.email} /></td>
