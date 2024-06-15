@@ -7,8 +7,8 @@ on:
     - release/*
 
 jobs:
-  build_website_files:
-    name: Build Files
+  test_server:
+    name: Build & Test Server
     runs-on: ubuntu-latest
 
     steps:
