@@ -77,6 +77,17 @@ INSERT INTO clients (
         CAST(('Jimmy McPerson', 'CEO', '0476 543 210', 'jim@business.com.au', NULL) AS client_contact)
     ],
     NULL
+), (
+    'Not Business Pty Ltd',
+    'Not a Business',
+    '32165498732',
+    FALSE,
+    '71 Cartwright Rd',
+    'Gympie',
+    'QLD',
+    4570,
+    NULL,
+    NULL
 );
 
 INSERT INTO jobs (

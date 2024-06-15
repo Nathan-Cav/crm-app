@@ -26,18 +26,19 @@ export default function ClientDashboard() {
     <>
       <ResourceHandler loading={clients.loading} error={clients.error}>
         <div class='filter-container'>
-          <label for='filter_inactive'><input type='checkbox' id='filter_inactive' onChange={(e) => setFilterInactive(e.target.checked)}/> <span>Show Inactive</span></label>
+          <label for='filter_inactive'><input type='checkbox' id='filter_inactive' onChange={(e) => setFilterInactive(e.target.checked)} /> <span>Show Inactive</span></label>
         </div>
 
-        <div>{JSON.stringify(clients(), null, 2)}</div>
         <div class='client-container'>
           <For each={clients().filter((client: { active: boolean; }) => client.active || filterInactive())}>
             {(client) =>
-              <div class='client' classList={{inactive: client.active}}>
-                <A href={`/client/${client.id}`}>{client.trading_as} ({client.company_name})</A>
-                <div>ABN {client.abn}</div>
-                <div>{client.address}, {client.suburb}, {client.state} {client.postcode}</div>
-              </div>
+              <A class='button-wrapper' href={`/client/${client.id}`}>
+                <div class='client' classList={{ inactive: !client.active }}>
+                  <h6>{client.trading_as} ({client.company_name})</h6>
+                    <div class='abn'>ABN {client.abn}</div>
+                    <div>{client.address}, {client.suburb}, {client.state} {client.postcode}</div>
+                </div>
+              </A>
             }
           </For>
         </div>

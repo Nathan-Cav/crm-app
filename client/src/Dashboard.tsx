@@ -4,12 +4,7 @@ import DashboardDisplay from './components/DashboardDisplay';
 import AddClient from './components/AddClient';
 
 export default function Dashboard() {
-  // const add = (window.location.href.split("/").pop() === "add");
-
-  const [add, setAdd] = createSignal(
-    false
-    // (window.location.href.split("/").pop() === "add")
-  );
+  const [add, setAdd] = createSignal(false);
 
   const goToAdd = () => {
     setAdd(!add())

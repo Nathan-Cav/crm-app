@@ -22,7 +22,8 @@ export let dbController = {
                 suburb,
                 state,
                 postcode
-             FROM clients;`
+             FROM clients
+             ORDER BY active DESC;`
         ));
     },
 
