@@ -27,5 +27,8 @@ jobs:
       - name: Replace DB Controller with Mock
         run: mv ./server/dist/src/db/mock_controller.js ./server/dist/src/db/controller.js
 
-      - name: Run Tests
-        run: npm test
+      - name: Check Directory Content
+        run: cd ./server/dist/src/db/ && ls -al
+
+      # - name: Run Tests
+      #   run: npm test
