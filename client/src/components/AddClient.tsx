@@ -1,14 +1,12 @@
 import { createSignal } from 'solid-js';
+import { A } from '@solidjs/router';
+
 import Overlay from './Overlay';
 import ClientForm from './ClientForm';
 
 import "./componentStyles/AddClient.css"
 
 export default function AddClient() {
-  const [overlay, setOverlay] = createSignal(true);
-
-  const toggleOverlay = () => { setOverlay(!overlay()) }
-
   const placeholderDataStructure = {
     trading_as: "",
     company_name: "",
@@ -26,13 +24,13 @@ export default function AddClient() {
 
   return (
     <>
-      <Overlay display={overlay()} />
+      <A class='button-wrapper' href="/"><Overlay display={true} /></A>
 
       <div class='new-client-container'>
-        <button type='button' class='close-button'>X</button>
+        <A class='button-wrapper' href="/"><button type='button' class='close-button'>X</button></A>
         <h2>Add New Client</h2>
         <div class='scroll-add'>
-          <ClientForm editable={true} includeJobs={false} client={placeholderDataStructure} />
+          <ClientForm editable={true} client={placeholderDataStructure} />
         </div>
         <button type='button' class=''>Save Changes</button>
       </div>

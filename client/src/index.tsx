@@ -12,9 +12,12 @@ const root = document.getElementById('root')
 render(() => (
     <Router>
         <Route path="/" component={Dashboard} />
+        <Route path="/add" component={Dashboard} />
         <Route path="/jobs" component={Dashboard} />
         <Route path="/jobs/:jobId" component={Dashboard} />
         <Route path="/client/:clientId" component={Client} />
+        <Route path="/client/:clientId/addjob/" component={Client} />
+        <Route path="/client/:clientId/jobs/:jobId" component={Client} />
         <Route path="*paramName" component={() => <Navigate href={"/"} />} />
     </Router>
 ), root!);

@@ -1,0 +1,32 @@
+:root{
+    --add-width: 650px;
+}
+
+.new-client-container {
+    display:block;
+    width: var(--add-width);
+    left: calc(50% - var(--add-width)/2);
+    top: var(--size-fluid-3);
+    position: fixed;
+    z-index: 1;
+    background-color: var(--surface-1);
+    padding: var(--size-fluid-3);
+    border-radius: var(--radius-2);
+}
+
+.new-client-container .scroll-add {
+    max-height: 700px;
+    overflow: auto;
+}
+
+.new-client-container .client-field input,
+.new-client-container .client-field select,
+.new-client-container .client-field textarea {
+    width: var(--size-fluid-10);
+}
+
+.new-client-container .close-button {
+    position: absolute;
+    top: var(--size-3);
+    right: var(--size-3);
+}

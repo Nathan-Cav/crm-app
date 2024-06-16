@@ -117,7 +117,7 @@ export let dbController = {
         client_id: string,
         client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] }
     ) => {
-        // Update Client as multiple SQL requests bundled into 1 transaction - insert the client and then insert the contacts as individual array entries
+        // Update Client as multiple SQL requests bundled into 1 transaction - update the client and then insert the contacts as individual array entries
         const dbClient = await dbConnection.beginTransaction();
         await dbConnection.appendTransaction(dbClient, "BEGIN;");
         const idRes = await dbConnection.appendTransaction(dbClient, `

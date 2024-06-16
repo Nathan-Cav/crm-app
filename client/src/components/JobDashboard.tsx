@@ -18,11 +18,11 @@ const fetchJobs = async () =>
   });
 
 export default function JobDashboard() {
-  const [jobs] = createResource(fetchJobs);
+  const [jobs, {refetch}] = createResource(fetchJobs);
   return (
     <>
       <ResourceHandler loading={jobs.loading} error={jobs.error}>
-        <JobDisplay jobs={jobs()} />
+        <JobDisplay OnComponentStale={()=>refetch()} jobs={jobs()} />
       </ResourceHandler >
     </>
   );

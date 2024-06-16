@@ -1,11 +1,9 @@
-import { For, JSX, Show } from 'solid-js';
-
-import JobDisplay from './JobDisplay';
+import { createEffect, For, Show } from 'solid-js';
 
 import "./componentStyles/ClientForm.css"
 
 export default function ClientForm(props: {
-  editable: boolean; includeJobs: boolean; client: {
+  editable: boolean; client: {
     total_outstanding: number; trading_as: string; company_name: string; abn: string; active: boolean; address: string; suburb: string; state: string; postcode: string; comments: string; client_contacts: any[]; jobs: any;
   };
 }) {
@@ -134,18 +132,6 @@ export default function ClientForm(props: {
           </div>
         </div>
       </form>
-
-      <Show when={props.includeJobs}>
-        <div class='client-jobs-container'>
-          <div class='heading-button-container'>
-            <h2>Jobs</h2>
-            <button type='button' class='add-button'>+ Add Job</button>
-          </div>
-          {/* <hr /> */}
-          <JobDisplay jobs={props.client.jobs} />
-        </div>
-      </Show>
-
     </>
   );
 }

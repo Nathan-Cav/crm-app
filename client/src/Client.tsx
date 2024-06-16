@@ -1,10 +1,11 @@
-import { createResource, createSignal, For, Show } from 'solid-js';
+import { createResource, createSignal } from 'solid-js';
 import { A, useParams } from "@solidjs/router";
 
 import ResourceHandler from './components/ResourceHandler';
 
 import "./styles/Client.css";
 import ClientForm from './components/ClientForm';
+import JobDisplay from './components/JobDisplay';
 
 // API Constants
 const protocol = "http";
@@ -22,7 +23,7 @@ const fetchClient = async (clientId: string) =>
 
 export default function Client() {
   const params = useParams();
-  const [client] = createResource(params.clientId, fetchClient);
+  const [client, {refetch}] = createResource(params.clientId, fetchClient);
 
   const [beingEdited, setBeingEdited] = createSignal(false);
   const [editText, setEditText] = createSignal("Edit Client");
@@ -30,11 +31,11 @@ export default function Client() {
   const editClient = () => {
     if (beingEdited()) {
       // Then form is being saved
-      setEditText("Edit Client")
+      setEditText("Edit Client");
     }
     else {
       // The form is being edited
-      setEditText("Save Changes")
+      setEditText("Save Changes");
 
     }
     setBeingEdited(!beingEdited());
@@ -53,9 +54,16 @@ export default function Client() {
           </header>
 
           <div class='client-container'>
-            <ClientForm client={client()} includeJobs={true} editable={beingEdited()} />
-          </div>
+            <ClientForm client={client()} editable={beingEdited()} />
 
+            <div class='client-jobs-container'>
+              <div class='heading-button-container'>
+                <h2>Jobs</h2>
+                <A class='button-wrapper' href={`/client/${params.clientId}/addjob`}><button type='button'>+ Add Job</button></A>
+              </div>
+              <JobDisplay OnComponentStale={()=>refetch()} jobs={client().jobs} />
+            </div>
+          </div>
         </ResourceHandler >
       </div >
     </>

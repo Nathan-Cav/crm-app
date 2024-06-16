@@ -1,21 +1,29 @@
-import { createSignal, Show } from 'solid-js';
+import { createEffect, createSignal, Show } from 'solid-js';
+import { A, useLocation } from '@solidjs/router';
 
 import DashboardDisplay from './components/DashboardDisplay';
 import AddClient from './components/AddClient';
 
 export default function Dashboard() {
+  const location = useLocation();
+
   const [add, setAdd] = createSignal(false);
 
-  const goToAdd = () => {
-    setAdd(!add())
-  };
+  createEffect(() => {
+    if (location.pathname.indexOf("/add") !== -1) {
+      setAdd(true);
+    }
+    else {
+      setAdd(false);
+    }
+  });
 
   return (
     <>
       <div class="app-display">
         <header>
           <h2>CRM System</h2>
-          <button type='button' onClick={goToAdd}>+ Add Client</button>
+          <A class='button-wrapper' href="/add"><button type='button'>+ Add Client</button></A>
         </header>
 
         <DashboardDisplay />
