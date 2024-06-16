@@ -96,6 +96,81 @@ export let api_functions = {
         return response;
     },
 
+    apiAddClient: async (
+        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] }
+    ) => {
+        // Validate request
+
+        // Check Required fields
+        if (!client.company_name) {
+            throw new ErrorMessage(400, "company_name must be specified").json();
+        }
+        if (!client.trading_as) {
+            throw new ErrorMessage(400, "trading_as must be specified").json();
+        }
+        if (!client.abn) {
+            throw new ErrorMessage(400, "abn must be specified").json();
+        }
+        if (!client.address) {
+            throw new ErrorMessage(400, "address must be specified").json();
+        }
+        if (!client.suburb) {
+            throw new ErrorMessage(400, "suburb must be specified").json();
+        }
+
+        // Check state
+        const validStates = ['QLD', 'NSW', 'TAS', 'ACT', 'VIC', 'WA', 'SA', 'NT'];
+        if (!validStates.includes(client.state)) {
+            throw new ErrorMessage(400, "Invalid State").json();
+        }
+
+        // Parse and check postcode
+        client.postcode = parseInt(`${client.postcode}`);
+        if (Number.isNaN(client.postcode)) {
+            throw new ErrorMessage(400, "Postcode must be provided").json();
+        }
+
+        // Make active true if not specified
+        client.active = client.active || true;
+
+        // Validate Contacts
+        client.client_contacts = client.client_contacts || [];
+        client.client_contacts.forEach(contact => {
+            if (!contact.name) {
+                throw new ErrorMessage(400, "client_contacts.name must be specified").json();
+            }
+            if (!contact.position) {
+                throw new ErrorMessage(400, "client_contacts.position must be specified").json();
+            }
+            if (!contact.email) {
+                throw new ErrorMessage(400, "client_contacts.email must be specified").json();
+            }
+            if (!contact.phone_number) {
+                throw new ErrorMessage(400, "client_contacts.phone_number must be specified").json();
+            }
+        });
+
+        // Add job to DB
+        const clientRes = await dbController.addClient(client)
+            .then(response => {
+                // Check if the client was found
+                if ((response.rowCount || 0) <= 0) {
+                    throw new Error('Not Inserted');
+                }
+                return response.rows;
+            })
+            .catch(error => {
+                // Handle Error
+                console.error(error);
+                throw std_error.json();
+            });
+
+        return {
+            id: clientRes[0].id,
+            message: "Client added successfully"
+        };
+    },
+
     apiGetJob: async (jobId: string) => {
         // Check the ID is valid
         if (!validUUID(jobId)) {
@@ -121,7 +196,9 @@ export let api_functions = {
         return jobRes[0];
     },
 
-    apiAddJob: async (job: {client_id: string, status: 'In Progress'|'Awaiting Payment'|'Complete', description: string, comments?: string, amount_due: number, amount_paid: number}) => {
+    apiAddJob: async (
+        job: { client_id: string, status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
+    ) => {
         // Validate request
         // Check the ID is valid
         if (!validUUID(job.client_id)) {
@@ -169,7 +246,10 @@ export let api_functions = {
         };
     },
 
-    apiUpdateJob: async (jobId: string, job: {status: 'In Progress'|'Awaiting Payment'|'Complete', description: string, comments?: string, amount_due: number, amount_paid: number}) => {
+    apiUpdateJob: async (
+        jobId: string,
+        job: { status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
+    ) => {
         // Validate request
         // Check the ID is valid
         if (!validUUID(jobId)) {

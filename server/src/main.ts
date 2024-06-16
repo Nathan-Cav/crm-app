@@ -12,7 +12,7 @@ app.use(express.json());
 /* ------------- */
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Congratulations! You have successfully started the server');
+  res.send('Congratulations! You have successfully started the server');
 });
 
 // List all clients
@@ -48,7 +48,9 @@ app.get('/jobs/:jobId', (req: Request, res: Response) => {
 
 // Add Client to DB
 app.post("/client", (req: Request, res: Response) => {
-  // TODO
+  api_functions.apiAddClient(req.body)
+    .then(ret => res.json(ret))
+    .catch(err => res.status(err.status || 500).json(err.message));
 });
 // Update Client in DB
 app.post("/client/:clientId", (req: Request, res: Response) => {
