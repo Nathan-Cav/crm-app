@@ -93,5 +93,65 @@ export let dbController = {
              ORDER BY (status = 'Awaiting Payment') DESC, status DESC, job_number DESC;`,
              [client_id]
         ));
+    },
+
+    addJob: async(job: {client_id: string, status: 'In Progress'|'Awaiting Payment'|'Complete', description: string, comments?: string, amount_due: number, amount_paid: number}) => {
+        return (await dbConnection.query(
+            `INSERT INTO jobs (
+                client_id,
+                status,
+                description,
+                comments,
+                amount_due,
+                amount_paid
+             ) VALUES (
+                $1,
+                $2,
+                $3,
+                $4,
+                $5,
+                $6
+             ) RETURNING id;`,
+             [
+                job.client_id,
+                job.status,
+                job.description,
+                job.comments,
+                job.amount_due,
+                job.amount_paid
+            ]
+        ));
+    },
+
+    updateJob: async(job_id: string, job: {status: 'In Progress'|'Awaiting Payment'|'Complete', description: string, comments?: string, amount_due: number, amount_paid: number}) => {
+        return (await dbConnection.query(
+            `UPDATE jobs SET
+                status = $1,
+                description = $2,
+                comments = $3,
+                amount_due = $4,
+                amount_paid = $5
+             WHERE id = $6`,
+             [
+                job.status,
+                job.description,
+                job.comments,
+                job.amount_due,
+                job.amount_paid,
+                job_id
+            ]
+        ));
+    },
+
+    deleteJob: async(job_id: string) => {
+        return (await dbConnection.query(
+            `DELETE FROM jobs
+             WHERE id IN (
+                SELECT id FROM jobs
+                WHERE id = $1
+                LIMIT 1
+             );`,
+             [job_id]
+        ));
     }
 }
