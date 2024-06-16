@@ -102,15 +102,59 @@ export let dbController = {
                 client.comments
             ]
         );
-        await addContactsInTransaction(client.client_contacts, dbClient, idRes);
+        await addContactsInTransaction(
+            client.client_contacts,
+            dbClient,
+            idRes.rows[0].id
+        );
         await dbConnection.appendTransaction(dbClient, "COMMIT;");
         dbConnection.endTransaction(dbClient);
 
         return idRes;
     },
 
-    updateClient: async (client_id: string, client: any) => {
+    updateClient: async (
+        client_id: string,
+        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] }
+    ) => {
+        // Update Client as multiple SQL requests bundled into 1 transaction - insert the client and then insert the contacts as individual array entries
+        const dbClient = await dbConnection.beginTransaction();
+        await dbConnection.appendTransaction(dbClient, "BEGIN;");
+        const idRes = await dbConnection.appendTransaction(dbClient, `
+            UPDATE clients SET
+                company_name = $1,
+                trading_as = $2,
+                abn = $3,
+                active = $4,
+                address = $5,
+                suburb = $6,
+                state = $7,
+                postcode = $8,
+                comments = $9,
+                client_contacts = NULL
+            WHERE id = $10`,
+            [
+                client.company_name,
+                client.trading_as,
+                client.abn,
+                client.active,
+                client.address,
+                client.suburb,
+                client.state,
+                client.postcode,
+                client.comments,
+                client_id
+            ]
+        );
+        await addContactsInTransaction(
+            client.client_contacts,
+            dbClient,
+            client_id
+        );
+        await dbConnection.appendTransaction(dbClient, "COMMIT;");
+        dbConnection.endTransaction(dbClient);
 
+        return idRes;
     },
 
     getJobs: async (job_id = "") => {
@@ -231,7 +275,7 @@ export let dbController = {
 async function addContactsInTransaction(
     client_contacts: [{ name: string; email: string; position: string; phone_number: string; comments: string; }],
     dbClient: PoolClient,
-    idRes: QueryResult
+    client_id: string
 ) {
     for (let i = 0; i < client_contacts.length; i++) {
         const contact = client_contacts[i];
@@ -244,7 +288,7 @@ async function addContactsInTransaction(
                 contact.phone_number,
                 contact.email,
                 contact.comments,
-                idRes.rows[0].id
+                client_id
             ]
         );
     }

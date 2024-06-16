@@ -48,13 +48,15 @@ app.get('/jobs/:jobId', (req: Request, res: Response) => {
 
 // Add Client to DB
 app.post("/client", (req: Request, res: Response) => {
-  api_functions.apiAddClient(req.body)
+  api_functions.apiAddUpdateClient(req.body)
     .then(ret => res.json(ret))
     .catch(err => res.status(err.status || 500).json(err.message));
 });
 // Update Client in DB
 app.post("/client/:clientId", (req: Request, res: Response) => {
-  // TODO
+  api_functions.apiAddUpdateClient(req.body, req.params.clientId)
+    .then(ret => res.json(ret))
+    .catch(err => res.status(err.status || 500).json(err.message));
 });
 
 // Add Job to DB

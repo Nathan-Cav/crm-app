@@ -22,7 +22,7 @@ function parseJobs(jobs: any[]) {
 }
 
 /**
- *
+ * Implements logic for all API endpoints
  */
 export let api_functions = {
     apiGetClients: async () => {
@@ -96,8 +96,9 @@ export let api_functions = {
         return response;
     },
 
-    apiAddClient: async (
-        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] }
+    apiAddUpdateClient: async (
+        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] },
+        clientId = ""
     ) => {
         // Validate request
 
@@ -131,7 +132,9 @@ export let api_functions = {
         }
 
         // Make active true if not specified
-        client.active = client.active || true;
+        client.active = (client.active !== undefined)
+            ? client.active
+            : true;
 
         // Validate Contacts
         client.client_contacts = client.client_contacts || [];
@@ -150,25 +153,49 @@ export let api_functions = {
             }
         });
 
-        // Add job to DB
-        const clientRes = await dbController.addClient(client)
-            .then(response => {
-                // Check if the client was found
-                if ((response.rowCount || 0) <= 0) {
-                    throw new Error('Not Inserted');
-                }
-                return response.rows;
-            })
-            .catch(error => {
-                // Handle Error
-                console.error(error);
-                throw std_error.json();
-            });
+        if (clientId === "") {
+            // Then client is being added
+            // Add job to DB
+            const clientRes = await dbController.addClient(client)
+                .then(response => {
+                    // Check if the client was found
+                    if ((response.rowCount || 0) <= 0) {
+                        throw new Error('Not Inserted');
+                    }
+                    return response.rows;
+                })
+                .catch(error => {
+                    // Handle Error
+                    console.error(error);
+                    throw std_error.json();
+                });
 
-        return {
-            id: clientRes[0].id,
-            message: "Client added successfully"
-        };
+            return {
+                id: clientRes[0].id,
+                message: "Client added successfully"
+            };
+        }
+        else {
+            // Client details are being updated
+            await dbController.updateClient(clientId, client)
+                .then(response => {
+                    // Check if the client was found
+                    if ((response.rowCount || 0) <= 0) {
+                        throw new Error('Not Updated');
+                    }
+                    return response.rows;
+                })
+                .catch(error => {
+                    // Handle Error
+                    console.error(error);
+                    throw std_error.json();
+                });
+
+            return {
+                id: clientId,
+                message: "Client details updated successfully"
+            };
+        }
     },
 
     apiGetJob: async (jobId: string) => {
