@@ -27,6 +27,19 @@ export let dbController = {
         ));
     },
 
+    getTotalOutstanding: async(client_id: string) => {
+        return (await dbConnection.query(
+            `SELECT
+             client_id,
+             SUM(amount_due - amount_paid) AS total_outstanding
+             FROM jobs
+             WHERE status <> 'In Progress'
+             AND client_id = $1
+             GROUP BY client_id;`,
+             [client_id]
+        ));
+    },
+
     getClient: async(client_id: string) => {
         return (await dbConnection.query(
             `SELECT
