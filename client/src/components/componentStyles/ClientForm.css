@@ -48,6 +48,11 @@
     height: var(--size-10);
 }
 
+.contact-container .delete-container {
+    display: flex;
+    height: var(--size-10)
+}
+
 .client-form input:disabled,
 .client-form select:disabled,
 .client-form textarea:disabled {

@@ -7,6 +7,7 @@ export default function ClientForm(props: {
     total_outstanding: number; trading_as: string; company_name: string; abn: string; active: boolean; address: string; suburb: string; state: string; postcode: string; comments: string; client_contacts: any[]; jobs: any;
   };
 }) {
+
   return (
     <>
       <form>
@@ -18,13 +19,13 @@ export default function ClientForm(props: {
               <div class="client-field">
                 <label for="trading_as">
                   <span>Trading As</span>
-                  <input type='text' id='trading_as' disabled={!props.editable} value={props.client.trading_as} />
+                  <input required={true} type='text' id='trading_as' name='trading_as' disabled={!props.editable} value={props.client.trading_as} />
                 </label>
               </div>
               <div class="client-field">
                 <label for="company_name">
                   <span>Company Name</span>
-                  <input type='text' id='company_name' disabled={!props.editable} value={props.client.company_name} />
+                  <input required={true} type='text' id='company_name' name='company_name' disabled={!props.editable} value={props.client.company_name} />
                 </label>
               </div>
             </Show>
@@ -32,7 +33,7 @@ export default function ClientForm(props: {
             <div class="client-field">
               <label for="active">
                 <span>Client Status</span>
-                <select id='active' disabled={!props.editable} value={(props.client.active) ? "true" : "false"}>
+                <select required={true} id='active' name='active' disabled={!props.editable} value={(props.client.active) ? "true" : "false"}>
                   <option value="true">Active</option>
                   <option value="false">Inactive</option>
                 </select>
@@ -42,32 +43,32 @@ export default function ClientForm(props: {
               <div class="client-field">
                 <label for="total_outstanding">
                   <span>Total Outstanding</span>
-                  <input type='text' id='total_outstanding' disabled={true} value={`$${props.client.total_outstanding.toFixed(2)}`} />
+                  <input required={true} type='text' id='total_outstanding' name='total_outstanding' disabled={true} value={`$${props.client.total_outstanding.toFixed(2)}`} />
                 </label>
               </div>
             </Show>
             <div class="client-field">
-              <label for="company_name">
+              <label for="abn">
                 <span>ABN</span>
-                <input type='text' disabled={!props.editable} value={props.client.abn} />
+                <input required={true} type='text' id="abn" name='abn' disabled={!props.editable} value={props.client.abn} />
               </label>
             </div>
             <div class="client-field">
               <label for="address">
                 <span>Address</span>
-                <input type='text' id='address' disabled={!props.editable} value={props.client.address} />
+                <input required={true} type='text' id='address' name='address' disabled={!props.editable} value={props.client.address} />
               </label>
             </div>
             <div class="client-field">
               <label for="suburb">
                 <span>Suburb</span>
-                <input type='text' id='suburb' disabled={!props.editable} value={props.client.suburb} />
+                <input required={true} type='text' id='suburb' name='suburb' disabled={!props.editable} value={props.client.suburb} />
               </label>
             </div>
             <div class="client-field">
               <label for="state">
                 <span>State</span>
-                <select id='state' disabled={!props.editable} value={props.client.state}>
+                <select required={true} id='state' name='state' disabled={!props.editable} value={props.client.state}>
                   <option value="" hidden={true} disabled={true}>Please Select a State</option>
                   <option value="QLD">Queensland</option>
                   <option value="NSW">New South Wales</option>
@@ -83,13 +84,13 @@ export default function ClientForm(props: {
             <div class="client-field">
               <label for="postcode">
                 <span>Postcode</span>
-                <input type='text' id='postcode' disabled={!props.editable} value={props.client.postcode} />
+                <input required={true} type='text' id='postcode' name='postcode' disabled={!props.editable} value={props.client.postcode} />
               </label>
             </div>
             <div class="client-field">
               <label for="comments">
                 <span>Comments</span>
-                <textarea id='comments' disabled={!props.editable}>{props.client.comments}</textarea>
+                <textarea required={true} id='comments' name='comments' disabled={!props.editable}>{props.client.comments}</textarea>
               </label>
             </div>
 
@@ -106,19 +107,29 @@ export default function ClientForm(props: {
                       <th>Email</th>
                       <th>Phone</th>
                       <th>Comments</th>
+                      <Show when={props.editable}>
+                        <th></th>
+                      </Show>
                     </tr>
                   </thead>
                   <tbody>
                     <For each={props.client.client_contacts}>
-                      {(contact) =>
+                      {(contact, i) =>
                         <tr>
                           <td>
-                            <input type='text' class='contact-name' placeholder='Name' disabled={!props.editable} value={contact.name} /><br />
-                            <input type='text' class='contact-pos' placeholder='Job Position' disabled={!props.editable} value={contact.position} />
+                            <input required={true} name={`contact_name_${i()}`} type='text' class='contact-name' placeholder='Name' disabled={!props.editable} value={contact.name} /><br />
+                            <input name={`contact_position_${i()}`} type='text' class='contact-pos' placeholder='Job Position' disabled={!props.editable} value={contact.position} />
                           </td>
-                          <td><input type='email' class='contact-email' disabled={!props.editable} value={contact.email} /></td>
-                          <td><input type='phone' class='contact-phone' disabled={!props.editable} value={contact.phone_number} /></td>
-                          <td><textarea class='contact-comments' disabled={!props.editable}>{contact.comments}</textarea></td>
+                          <td><input required={true} name={`contact_email_${i()}`} type='email' class='contact-email' disabled={!props.editable} value={contact.email} /></td>
+                          <td><input required={true} name={`contact_phone_${i()}`} type='phone' class='contact-phone' disabled={!props.editable} value={contact.phone_number} /></td>
+                          <td><textarea name={`contact_comments_${i()}`} required={true} class='contact-comments' disabled={!props.editable}>{contact.comments}</textarea></td>
+                          <Show when={props.editable}>
+                            <td>
+                              <div class='delete-container'>
+                                <button type='button'>Delete</button>
+                              </div>
+                            </td>
+                          </Show>
                         </tr>
                       }
                     </For>
