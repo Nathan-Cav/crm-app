@@ -19,6 +19,7 @@ export default function AddClient() {
     state: "",
     postcode: "",
     comments: "",
+    total_outstanding: 0.00,
     client_contacts: [],
     jobs: [],
   }
@@ -31,7 +32,7 @@ export default function AddClient() {
         <button type='button' class='close-button'>X</button>
         <h2>Add New Client</h2>
         <div class='scroll-add'>
-          <ClientForm editable={true} client={placeholderDataStructure} />
+          <ClientForm editable={true} includeJobs={false} client={placeholderDataStructure} />
         </div>
         <button type='button' class=''>Save Changes</button>
       </div>

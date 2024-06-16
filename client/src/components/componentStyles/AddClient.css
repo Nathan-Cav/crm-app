@@ -1,5 +1,5 @@
 :root{
-    --add-width: 700px;
+    --add-width: 650px;
 }
 
 .new-client-container {
@@ -15,7 +15,7 @@
 }
 
 .new-client-container .scroll-add {
-    max-height: 800px;
+    max-height: 700px;
     overflow: auto;
 }
 

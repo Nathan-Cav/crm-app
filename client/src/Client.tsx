@@ -53,7 +53,7 @@ export default function Client() {
           </header>
 
           <div class='client-container'>
-            <ClientForm client={client()} editable={beingEdited()} />
+            <ClientForm client={client()} includeJobs={true} editable={beingEdited()} />
           </div>
 
         </ResourceHandler >
