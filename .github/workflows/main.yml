@@ -21,7 +21,7 @@ jobs:
       - name: Install Server Dependencies
         run: npm run install-server
 
-      - name: Change DB Controller Over to Mock Controller
+      - name: Find and Replace DB Controller in Server Files with Mock Controller
         run: sed -i -e 's/.\/db\/controller/.\/db\/mock_controller/g' ./server/src/api_functions.ts
 
       - name: Build Server
