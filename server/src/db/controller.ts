@@ -103,7 +103,7 @@ export let dbController = {
             ]
         );
         await addContactsInTransaction(
-            client.client_contacts,
+            client.client_contacts || [],
             dbClient,
             idRes.rows[0].id
         );
@@ -147,7 +147,7 @@ export let dbController = {
             ]
         );
         await addContactsInTransaction(
-            client.client_contacts,
+            client.client_contacts || [],
             dbClient,
             client_id
         );

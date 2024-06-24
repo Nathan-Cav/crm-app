@@ -7,17 +7,12 @@ export interface InputJob {
     amount_paid: number
 }
 
-export interface OutputJob {
+export interface OutputJob extends InputJob {
     id: string
-    client_id?: string
     company_name?: string
     trading_as?: string
     abn?: string
-    status: 'In Progress' | 'Awaiting Payment' | 'Complete'
+    comments: string
     job_number: number
-    description: string
-    comments?: string
-    amount_due: number
-    amount_paid: number
     total_outstanding: number
 }
