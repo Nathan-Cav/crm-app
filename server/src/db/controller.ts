@@ -25,7 +25,8 @@ export let dbController = {
                 address,
                 suburb,
                 state,
-                postcode
+                postcode,
+                comments
              FROM clients
              ORDER BY active DESC;`
         ));
