@@ -199,6 +199,7 @@ Add a job to the system, associated with a given. Response returns the ID of the
     "client_id": "a22663e8-6cb9-47a6-b924-d6873d56af0b",
     "status": "Complete",
     "description": "Small Job",
+    "comments": "Another job...",
     "amount_due": 200,
     "amount_paid": 200
 }
@@ -225,7 +226,8 @@ Update a job in the system referencing the Job ID.
     "status": "In Progress",
     "description": "Large Job",
     "comments": "Update Comment",
-    "amount_due": 400
+    "amount_due": 400,
+    "amount_paid": 200
 }
 ```
 
