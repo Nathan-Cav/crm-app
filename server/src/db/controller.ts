@@ -132,7 +132,8 @@ export let dbController = {
                 postcode = $8,
                 comments = $9,
                 client_contacts = NULL
-            WHERE id = $10`,
+            WHERE id = $10
+            RETURNING id;`,
             [
                 client.company_name,
                 client.trading_as,
@@ -244,7 +245,8 @@ export let dbController = {
                 comments = $3,
                 amount_due = $4,
                 amount_paid = $5
-             WHERE id = $6`,
+             WHERE id = $6
+             RETURNING id;`,
             [
                 job.status,
                 job.description,
@@ -263,7 +265,8 @@ export let dbController = {
                 SELECT id FROM jobs
                 WHERE id = $1
                 LIMIT 1
-             );`,
+             )
+             RETURNING id;`,
             [job_id]
         ));
     }
@@ -278,8 +281,10 @@ async function addContactsInTransaction(
     for (let i = 0; i < client_contacts.length; i++) {
         const contact = client_contacts[i];
         await dbConnection.appendTransaction(dbClient, `
-                UPDATE clients SET client_contacts = array_append(client_contacts, CAST(($1, $2, $3, $4, $5) AS client_contact))
-                WHERE id = $6;`,
+                UPDATE clients SET
+                    client_contacts = array_append(client_contacts, CAST(($1, $2, $3, $4, $5) AS client_contact))
+                WHERE id = $6
+                RETURNING id;`,
             [
                 contact.name,
                 contact.position,

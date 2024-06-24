@@ -179,7 +179,7 @@ export let api_functions = {
         }
         else {
             // Client details are being updated
-            await dbController.updateClient(clientId, client)
+            const clientRes = await dbController.updateClient(clientId, client)
                 .then(response => {
                     // Check if the client was found
                     if ((response.rowCount || 0) <= 0) {
@@ -194,7 +194,7 @@ export let api_functions = {
                 });
 
             return {
-                id: clientId,
+                id: clientRes[0].id,
                 message: "Client details updated successfully"
             };
         }
@@ -303,7 +303,7 @@ export let api_functions = {
         }
 
         // Update job in DB
-        await dbController.updateJob(jobId, job)
+        const jobRes = await dbController.updateJob(jobId, job)
             .then(response => {
                 // Check if the client was found
                 if ((response.rowCount || 0) <= 0) {
@@ -318,7 +318,7 @@ export let api_functions = {
             });
 
         return {
-            id: jobId,
+            id: jobRes[0].id,
             message: "Job updated successfully"
         };
     },
@@ -327,7 +327,7 @@ export let api_functions = {
         if (!validUUID(jobId)) {
             throw new ErrorMessage(400, "Invalid Job ID").json();
         }
-        await dbController.deleteJob(jobId)
+        const jobRes = await dbController.deleteJob(jobId)
             .then(response => {
                 // Check if the job was found
                 if ((response.rowCount || 0) <= 0) {
@@ -344,6 +344,9 @@ export let api_functions = {
                 throw std_error.json();
             });
 
-        return { message: "Job deleted successfully" };
+        return {
+            id: jobRes[0].id,
+            message: "Job deleted successfully"
+        };
     }
 }
