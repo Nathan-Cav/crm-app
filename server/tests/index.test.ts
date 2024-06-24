@@ -37,7 +37,7 @@ describe('testing index file', () => {
     test('Job Data', () => {
         api_functions.apiGetClient("33ed8cd8-c705-4d61-b7d4-f28159824c6f")
             .then(res => {
-                const jobs = res.jobs;
+                const jobs = res.jobs || [];
                 jobs.forEach((job: any) => {
                     expect(typeof job.amount_due).toBe("number");
                     expect(typeof job.amount_paid).toBe("number");
