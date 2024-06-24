@@ -5,10 +5,11 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { OutputJob } from '../models/Job';
+import { InputJob, OutputJob } from '../models/Job';
+import { InputClient, OutputClient } from '../models/Client';
 
 
-async function getMockData() {
+async function getMockData(): Promise<OutputClient> {
     const mockData = fs.readFileSync(path.join(__dirname, `mockData.json`), 'utf8');
     return JSON.parse(mockData);
 }
@@ -60,7 +61,7 @@ export let dbController = {
 
     getJobs: async (job_id = "") => {
         const data = await getMockData();
-        const jobs = data.jobs.map((job: OutputJob) => {
+        const jobs = (data.jobs || []).map((job: OutputJob) => {
             return {
                 id: job.id,
                 client_id: data.id,
@@ -91,8 +92,7 @@ export let dbController = {
         const data = await getMockData();
         const rows: any[] = (data.id !== client_id)
             ? []
-            : data.jobs
-                .map((job: OutputJob) => {
+            : (data.jobs || []).map((job: OutputJob) => {
                 return {
                     id: job.id,
                     job_number: job.job_number,
@@ -109,5 +109,57 @@ export let dbController = {
             rowCount: rows.length,
             rows: rows
         };
+    },
+
+    addClient: async (_client: InputClient) => {
+        const data = await getMockData();
+        return {
+            rowCount: 1,
+            rows: [
+                {id: data.id}
+            ]
+        }
+    },
+
+    updateClient: async (
+        client_id: string,
+        _client: InputClient
+    ) => {
+        return {
+            rowCount: 1,
+            rows: [
+                {id: client_id}
+            ]
+        }
+    },
+
+    addJob: async (_job: InputJob) => {
+        return {
+            rowCount: 1,
+            rows: [
+                {id: "eea06942-21c4-4486-8289-e0f4b030c6d6"}
+            ]
+        }
+    },
+
+    updateJob: async (
+        job_id: string,
+        _job: InputJob
+    ) => {
+        return {
+            rowCount: 1,
+            rows: [
+                {id: job_id}
+            ]
+        }
+    },
+
+    deleteJob: async (job_id: string) => {
+        return {
+            rowCount: 1,
+            rows: [
+                {id: job_id}
+            ]
+        }
     }
 }

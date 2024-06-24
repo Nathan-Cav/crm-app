@@ -158,7 +158,7 @@ export let api_functions = {
         if (clientId === "") {
             // Then client is being added
             // Add job to DB
-            const clientRes: OutputClient[] = await dbController.addClient(client)
+            const clientRes = await dbController.addClient(client)
                 .then(response => {
                     // Check if the client was found
                     if ((response.rowCount || 0) <= 0) {
