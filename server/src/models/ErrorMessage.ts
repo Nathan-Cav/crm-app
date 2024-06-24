@@ -1,8 +1,8 @@
 export class ErrorMessage {
-    statusCode: Number;
+    statusCode: number;
     errorMessage: string;
 
-    constructor(status: Number, message: string) {
+    constructor(status: number, message: string) {
         this.statusCode = status;
         this.errorMessage = message;
     }

@@ -5,6 +5,9 @@
 
 import { PoolClient, QueryResult } from "pg";
 import { dbConnection } from "./connection";
+import { Client } from "../models/Client";
+import { ClientContact } from "../models/ClientContact";
+import { Job } from "../models/Job";
 
 /**
  * The database controller object.
@@ -61,10 +64,7 @@ export let dbController = {
         ));
     },
 
-    addClient: async (
-        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] }
-    ) => {
-
+    addClient: async (client: Client) => {
         // Insert Client as multiple SQL requests bundled into 1 transaction - insert the client and then insert the contacts as individual array entries
         const dbClient = await dbConnection.beginTransaction();
         await dbConnection.appendTransaction(dbClient, "BEGIN;");
@@ -115,7 +115,7 @@ export let dbController = {
 
     updateClient: async (
         client_id: string,
-        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] }
+        client: Client
     ) => {
         // Update Client as multiple SQL requests bundled into 1 transaction - update the client and then insert the contacts as individual array entries
         const dbClient = await dbConnection.beginTransaction();
@@ -205,9 +205,7 @@ export let dbController = {
         ));
     },
 
-    addJob: async (
-        job: { client_id: string, status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
-    ) => {
+    addJob: async (job: Job) => {
         return (await dbConnection.query(
             `INSERT INTO jobs (
                 client_id,
@@ -237,7 +235,7 @@ export let dbController = {
 
     updateJob: async (
         job_id: string,
-        job: { status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
+        job: Job
     ) => {
         return (await dbConnection.query(
             `UPDATE jobs SET
@@ -273,7 +271,7 @@ export let dbController = {
 
 // Function to add contacts
 async function addContactsInTransaction(
-    client_contacts: [{ name: string; email: string; position: string; phone_number: string; comments: string; }],
+    client_contacts: ClientContact[],
     dbClient: PoolClient,
     client_id: string
 ) {

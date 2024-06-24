@@ -2,6 +2,8 @@ import { validate as uuidValidate } from 'uuid';
 import { version as uuidVersion } from 'uuid';
 import { dbController } from "./db/controller";
 import { ErrorMessage } from "./models/ErrorMessage";
+import { Client } from './models/Client';
+import { Job } from './models/Job';
 
 const std_error = new ErrorMessage(
     500,
@@ -97,7 +99,7 @@ export let api_functions = {
     },
 
     apiAddUpdateClient: async (
-        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] },
+        client: Client,
         clientId = ""
     ) => {
         // Validate request
@@ -223,16 +225,14 @@ export let api_functions = {
         return jobRes[0];
     },
 
-    apiAddJob: async (
-        job: { client_id: string, status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
-    ) => {
+    apiAddJob: async (job: Job) => {
         // Validate request
         // Check the ID is valid
-        if (!validUUID(job.client_id)) {
+        if (!validUUID(job.client_id || "")) {
             throw new ErrorMessage(400, "Invalid Client ID").json();
         }
         // Check that the client ID is actually in the system
-        await api_functions.apiGetClient(job.client_id);
+        await api_functions.apiGetClient(job.client_id || "");
 
         // Check status
         if (job.status !== "In Progress" && job.status !== "Awaiting Payment" && job.status !== "Complete") {
@@ -275,7 +275,7 @@ export let api_functions = {
 
     apiUpdateJob: async (
         jobId: string,
-        job: { status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
+        job: Job
     ) => {
         // Validate request
         // Check the ID is valid
