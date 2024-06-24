@@ -5,6 +5,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { OutputJob } from '../models/Job';
 
 
 async function getMockData() {
@@ -59,7 +60,7 @@ export let dbController = {
 
     getJobs: async (job_id = "") => {
         const data = await getMockData();
-        const jobs = data.jobs.map((job: { id: any; job_number: any; status: any; description: any; comments: any; amount_due: any; amount_paid: any; total_outstanding: any; }) => {
+        const jobs = data.jobs.map((job: OutputJob) => {
             return {
                 id: job.id,
                 client_id: data.id,
@@ -91,7 +92,7 @@ export let dbController = {
         const rows: any[] = (data.id !== client_id)
             ? []
             : data.jobs
-                .map((job: { id: any; job_number: any; status: any; description: any; comments: any; amount_due: any; amount_paid: any; total_outstanding: any; }) => {
+                .map((job: OutputJob) => {
                 return {
                     id: job.id,
                     job_number: job.job_number,

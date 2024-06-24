@@ -2,8 +2,8 @@ import { validate as uuidValidate } from 'uuid';
 import { version as uuidVersion } from 'uuid';
 import { dbController } from "./db/controller";
 import { ErrorMessage } from "./models/ErrorMessage";
-import { Client } from './models/Client';
-import { Job } from './models/Job';
+import { InputClient, OutputClient } from './models/Client';
+import { InputJob, OutputJob } from './models/Job';
 
 const std_error = new ErrorMessage(
     500,
@@ -28,7 +28,7 @@ function parseJobs(jobs: any[]) {
  */
 export let api_functions = {
     apiGetClients: async () => {
-        const clientRes = await dbController.getClients()
+        const clientRes: OutputClient[] = await dbController.getClients()
             .then(response => response.rows || [])
             .catch(error => {
                 // Handle Error
@@ -40,7 +40,7 @@ export let api_functions = {
     },
 
     apiGetAllJobs: async () => {
-        const jobRes = await dbController.getJobs()
+        const jobRes: OutputJob[] = await dbController.getJobs()
             .then(response => parseJobs(response.rows) || [])
             .catch(error => {
                 // Handle Error
@@ -58,7 +58,7 @@ export let api_functions = {
         }
 
         // Retrieve client information from the DB
-        const clientRes = await dbController.getClient(clientId)
+        const clientRes: OutputClient[] = await dbController.getClient(clientId)
             .then(response => {
                 // Check if the client was found
                 if ((response.rowCount || 0) <= 0) {
@@ -76,7 +76,7 @@ export let api_functions = {
             });
 
         // Retrieve all jobs associated with a given client
-        const jobRes = await dbController.getJobsForClient(clientId)
+        const jobRes: OutputJob[] = await dbController.getJobsForClient(clientId)
             .then(response => parseJobs(response.rows) || [])
             .catch(error => {
                 // Handle Error
@@ -99,7 +99,7 @@ export let api_functions = {
     },
 
     apiAddUpdateClient: async (
-        client: Client,
+        client: InputClient,
         clientId = ""
     ) => {
         // Validate request
@@ -158,7 +158,7 @@ export let api_functions = {
         if (clientId === "") {
             // Then client is being added
             // Add job to DB
-            const clientRes = await dbController.addClient(client)
+            const clientRes: OutputClient[] = await dbController.addClient(client)
                 .then(response => {
                     // Check if the client was found
                     if ((response.rowCount || 0) <= 0) {
@@ -205,7 +205,7 @@ export let api_functions = {
         if (!validUUID(jobId)) {
             throw new ErrorMessage(400, "Invalid Job ID").json();
         }
-        const jobRes = await dbController.getJobs(jobId)
+        const jobRes: OutputJob[] = await dbController.getJobs(jobId)
             .then(response => {
                 // Check if the job was found
                 if ((response.rowCount || 0) <= 0) {
@@ -225,7 +225,7 @@ export let api_functions = {
         return jobRes[0];
     },
 
-    apiAddJob: async (job: Job) => {
+    apiAddJob: async (job: InputJob) => {
         // Validate request
         // Check the ID is valid
         if (!validUUID(job.client_id || "")) {
@@ -275,7 +275,7 @@ export let api_functions = {
 
     apiUpdateJob: async (
         jobId: string,
-        job: Job
+        job: InputJob
     ) => {
         // Validate request
         // Check the ID is valid

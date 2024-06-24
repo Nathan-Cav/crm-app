@@ -5,9 +5,9 @@
 
 import { PoolClient, QueryResult } from "pg";
 import { dbConnection } from "./connection";
-import { Client } from "../models/Client";
+import { InputClient } from "../models/Client";
 import { ClientContact } from "../models/ClientContact";
-import { Job } from "../models/Job";
+import { InputJob } from "../models/Job";
 
 /**
  * The database controller object.
@@ -64,7 +64,7 @@ export let dbController = {
         ));
     },
 
-    addClient: async (client: Client) => {
+    addClient: async (client: InputClient) => {
         // Insert Client as multiple SQL requests bundled into 1 transaction - insert the client and then insert the contacts as individual array entries
         const dbClient = await dbConnection.beginTransaction();
         await dbConnection.appendTransaction(dbClient, "BEGIN;");
@@ -115,7 +115,7 @@ export let dbController = {
 
     updateClient: async (
         client_id: string,
-        client: Client
+        client: InputClient
     ) => {
         // Update Client as multiple SQL requests bundled into 1 transaction - update the client and then insert the contacts as individual array entries
         const dbClient = await dbConnection.beginTransaction();
@@ -205,7 +205,7 @@ export let dbController = {
         ));
     },
 
-    addJob: async (job: Job) => {
+    addJob: async (job: InputJob) => {
         return (await dbConnection.query(
             `INSERT INTO jobs (
                 client_id,
@@ -235,7 +235,7 @@ export let dbController = {
 
     updateJob: async (
         job_id: string,
-        job: Job
+        job: InputJob
     ) => {
         return (await dbConnection.query(
             `UPDATE jobs SET
