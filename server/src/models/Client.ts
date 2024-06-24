@@ -17,7 +17,6 @@ export interface InputClient {
 export interface OutputClient extends InputClient {
     id: string
     active: boolean
-    comments: string
     total_outstanding?: number
     jobs?: OutputJob[]
 };
