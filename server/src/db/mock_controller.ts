@@ -5,9 +5,11 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { InputJob, OutputJob } from '../models/Job';
+import { InputClient, OutputClient } from '../models/Client';
 
 
-async function getMockData() {
+async function getMockData(): Promise<OutputClient> {
     const mockData = fs.readFileSync(path.join(__dirname, `mockData.json`), 'utf8');
     return JSON.parse(mockData);
 }
@@ -15,7 +17,7 @@ async function getMockData() {
 export let dbController = {
     getClients: async () => {
         const data = await getMockData();
-        const rows: any[] = [{
+        const rows: OutputClient[] = [{
             id: data.id,
             company_name: data.company_name,
             trading_as: data.trading_as,
@@ -35,7 +37,7 @@ export let dbController = {
 
     getClient: async (client_id: string) => {
         const data = await getMockData();
-        const rows: any[] = (data.id !== client_id)
+        const rows: OutputClient[] = (data.id !== client_id)
             ? []
             : [{
                 id: data.id,
@@ -59,7 +61,7 @@ export let dbController = {
 
     getJobs: async (job_id = "") => {
         const data = await getMockData();
-        const jobs = data.jobs.map((job: { id: any; job_number: any; status: any; description: any; comments: any; amount_due: any; amount_paid: any; total_outstanding: any; }) => {
+        const jobs: OutputJob[] = (data.jobs || []).map((job: OutputJob) => {
             return {
                 id: job.id,
                 client_id: data.id,
@@ -76,8 +78,8 @@ export let dbController = {
                 total_outstanding: job.total_outstanding,
             }
         });
-        const rows: any[] = (job_id !== "")
-            ? jobs.filter((job: { id: string; }) => job.id === job_id)
+        const rows = (job_id !== "")
+            ? jobs.filter((job: OutputJob) => job.id === job_id)
             : jobs;
 
         return {
@@ -88,10 +90,9 @@ export let dbController = {
 
     getJobsForClient: async (client_id: string) => {
         const data = await getMockData();
-        const rows: any[] = (data.id !== client_id)
+        const rows: OutputJob[] = (data.id !== client_id)
             ? []
-            : data.jobs
-                .map((job: { id: any; job_number: any; status: any; description: any; comments: any; amount_due: any; amount_paid: any; total_outstanding: any; }) => {
+            : (data.jobs || []).map((job: OutputJob) => {
                 return {
                     id: job.id,
                     job_number: job.job_number,
@@ -103,6 +104,70 @@ export let dbController = {
                     total_outstanding: job.total_outstanding
                 }
             });
+
+        return {
+            rowCount: rows.length,
+            rows: rows
+        };
+    },
+
+    addClient: async (_client: InputClient) => {
+        const data = await getMockData();
+        return {
+            rowCount: 1,
+            rows: [
+                { id: data.id }
+            ]
+        };
+    },
+
+    updateClient: async (
+        client_id: string,
+        _client: InputClient
+    ) => {
+        const data = await getMockData();
+        const rows = (data.id !== client_id)
+            ? []
+            : [{ id: client_id }];
+
+        return {
+            rowCount: rows.length,
+            rows: rows
+        };
+    },
+
+    addJob: async (job: InputJob) => {
+        const data = await getMockData();
+        const rows = (data.id !== job.client_id)
+            ? []
+            : [{ id: "eea06942-21c4-4486-8289-e0f4b030c6d6" }];
+
+        return {
+            rowCount: rows.length,
+            rows: rows
+        };
+    },
+
+    updateJob: async (
+        job_id: string,
+        _job: InputJob
+    ) => {
+        const data = await getMockData();
+        const rows = (data.jobs || [])
+            .filter((job: OutputJob) => job.id === job_id)
+            .map((job: OutputJob) => { return { id: job.id } });
+
+        return {
+            rowCount: rows.length,
+            rows: rows
+        };
+    },
+
+    deleteJob: async (job_id: string) => {
+        const data = await getMockData();
+        const rows = (data.jobs || [])
+            .filter((job: OutputJob) => job.id === job_id)
+            .map((job: OutputJob) => { return { id: job.id } });
 
         return {
             rowCount: rows.length,

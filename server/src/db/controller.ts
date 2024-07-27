@@ -5,6 +5,9 @@
 
 import { PoolClient, QueryResult } from "pg";
 import { dbConnection } from "./connection";
+import { InputClient } from "../models/Client";
+import { ClientContact } from "../models/ClientContact";
+import { InputJob } from "../models/Job";
 
 /**
  * The database controller object.
@@ -61,10 +64,7 @@ export let dbController = {
         ));
     },
 
-    addClient: async (
-        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] }
-    ) => {
-
+    addClient: async (client: InputClient) => {
         // Insert Client as multiple SQL requests bundled into 1 transaction - insert the client and then insert the contacts as individual array entries
         const dbClient = await dbConnection.beginTransaction();
         await dbConnection.appendTransaction(dbClient, "BEGIN;");
@@ -103,7 +103,7 @@ export let dbController = {
             ]
         );
         await addContactsInTransaction(
-            client.client_contacts,
+            client.client_contacts || [],
             dbClient,
             idRes.rows[0].id
         );
@@ -115,7 +115,7 @@ export let dbController = {
 
     updateClient: async (
         client_id: string,
-        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] }
+        client: InputClient
     ) => {
         // Update Client as multiple SQL requests bundled into 1 transaction - update the client and then insert the contacts as individual array entries
         const dbClient = await dbConnection.beginTransaction();
@@ -132,7 +132,8 @@ export let dbController = {
                 postcode = $8,
                 comments = $9,
                 client_contacts = NULL
-            WHERE id = $10`,
+            WHERE id = $10
+            RETURNING id;`,
             [
                 client.company_name,
                 client.trading_as,
@@ -147,7 +148,7 @@ export let dbController = {
             ]
         );
         await addContactsInTransaction(
-            client.client_contacts,
+            client.client_contacts || [],
             dbClient,
             client_id
         );
@@ -205,9 +206,7 @@ export let dbController = {
         ));
     },
 
-    addJob: async (
-        job: { client_id: string, status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
-    ) => {
+    addJob: async (job: InputJob) => {
         return (await dbConnection.query(
             `INSERT INTO jobs (
                 client_id,
@@ -237,7 +236,7 @@ export let dbController = {
 
     updateJob: async (
         job_id: string,
-        job: { status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
+        job: InputJob
     ) => {
         return (await dbConnection.query(
             `UPDATE jobs SET
@@ -246,7 +245,8 @@ export let dbController = {
                 comments = $3,
                 amount_due = $4,
                 amount_paid = $5
-             WHERE id = $6`,
+             WHERE id = $6
+             RETURNING id;`,
             [
                 job.status,
                 job.description,
@@ -265,7 +265,8 @@ export let dbController = {
                 SELECT id FROM jobs
                 WHERE id = $1
                 LIMIT 1
-             );`,
+             )
+             RETURNING id;`,
             [job_id]
         ));
     }
@@ -273,15 +274,17 @@ export let dbController = {
 
 // Function to add contacts
 async function addContactsInTransaction(
-    client_contacts: [{ name: string; email: string; position: string; phone_number: string; comments: string; }],
+    client_contacts: ClientContact[],
     dbClient: PoolClient,
     client_id: string
 ) {
     for (let i = 0; i < client_contacts.length; i++) {
         const contact = client_contacts[i];
         await dbConnection.appendTransaction(dbClient, `
-                UPDATE clients SET client_contacts = array_append(client_contacts, CAST(($1, $2, $3, $4, $5) AS client_contact))
-                WHERE id = $6;`,
+                UPDATE clients SET
+                    client_contacts = array_append(client_contacts, CAST(($1, $2, $3, $4, $5) AS client_contact))
+                WHERE id = $6
+                RETURNING id;`,
             [
                 contact.name,
                 contact.position,

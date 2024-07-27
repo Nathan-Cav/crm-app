@@ -2,6 +2,8 @@ import { validate as uuidValidate } from 'uuid';
 import { version as uuidVersion } from 'uuid';
 import { dbController } from "./db/controller";
 import { ErrorMessage } from "./models/ErrorMessage";
+import { InputClient, OutputClient } from './models/Client';
+import { InputJob, OutputJob } from './models/Job';
 
 const std_error = new ErrorMessage(
     500,
@@ -26,7 +28,7 @@ function parseJobs(jobs: any[]) {
  */
 export let api_functions = {
     apiGetClients: async () => {
-        const clientRes = await dbController.getClients()
+        const clientRes: OutputClient[] = await dbController.getClients()
             .then(response => response.rows || [])
             .catch(error => {
                 // Handle Error
@@ -38,7 +40,7 @@ export let api_functions = {
     },
 
     apiGetAllJobs: async () => {
-        const jobRes = await dbController.getJobs()
+        const jobRes: OutputJob[] = await dbController.getJobs()
             .then(response => parseJobs(response.rows) || [])
             .catch(error => {
                 // Handle Error
@@ -56,7 +58,7 @@ export let api_functions = {
         }
 
         // Retrieve client information from the DB
-        const clientRes = await dbController.getClient(clientId)
+        const clientRes: OutputClient[] = await dbController.getClient(clientId)
             .then(response => {
                 // Check if the client was found
                 if ((response.rowCount || 0) <= 0) {
@@ -74,7 +76,7 @@ export let api_functions = {
             });
 
         // Retrieve all jobs associated with a given client
-        const jobRes = await dbController.getJobsForClient(clientId)
+        const jobRes: OutputJob[] = await dbController.getJobsForClient(clientId)
             .then(response => parseJobs(response.rows) || [])
             .catch(error => {
                 // Handle Error
@@ -97,7 +99,7 @@ export let api_functions = {
     },
 
     apiAddUpdateClient: async (
-        client: { company_name: string, trading_as: string, abn: string, active: boolean, address: string, suburb: string, state: 'QLD' | 'NSW' | 'TAS' | 'ACT' | 'VIC' | 'WA' | 'SA' | 'NT', postcode: number, comments: string, client_contacts: [{ name: string, email: string, position: string, phone_number: string, comments: string }] },
+        client: InputClient,
         clientId = ""
     ) => {
         // Validate request
@@ -177,7 +179,7 @@ export let api_functions = {
         }
         else {
             // Client details are being updated
-            await dbController.updateClient(clientId, client)
+            const clientRes = await dbController.updateClient(clientId, client)
                 .then(response => {
                     // Check if the client was found
                     if ((response.rowCount || 0) <= 0) {
@@ -192,7 +194,7 @@ export let api_functions = {
                 });
 
             return {
-                id: clientId,
+                id: clientRes[0].id,
                 message: "Client details updated successfully"
             };
         }
@@ -203,7 +205,7 @@ export let api_functions = {
         if (!validUUID(jobId)) {
             throw new ErrorMessage(400, "Invalid Job ID").json();
         }
-        const jobRes = await dbController.getJobs(jobId)
+        const jobRes: OutputJob[] = await dbController.getJobs(jobId)
             .then(response => {
                 // Check if the job was found
                 if ((response.rowCount || 0) <= 0) {
@@ -223,16 +225,14 @@ export let api_functions = {
         return jobRes[0];
     },
 
-    apiAddJob: async (
-        job: { client_id: string, status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
-    ) => {
+    apiAddJob: async (job: InputJob) => {
         // Validate request
         // Check the ID is valid
-        if (!validUUID(job.client_id)) {
+        if (!validUUID(job.client_id || "")) {
             throw new ErrorMessage(400, "Invalid Client ID").json();
         }
         // Check that the client ID is actually in the system
-        await api_functions.apiGetClient(job.client_id);
+        await api_functions.apiGetClient(job.client_id || "");
 
         // Check status
         if (job.status !== "In Progress" && job.status !== "Awaiting Payment" && job.status !== "Complete") {
@@ -275,7 +275,7 @@ export let api_functions = {
 
     apiUpdateJob: async (
         jobId: string,
-        job: { status: 'In Progress' | 'Awaiting Payment' | 'Complete', description: string, comments?: string, amount_due: number, amount_paid: number }
+        job: InputJob
     ) => {
         // Validate request
         // Check the ID is valid
@@ -303,7 +303,7 @@ export let api_functions = {
         }
 
         // Update job in DB
-        await dbController.updateJob(jobId, job)
+        const jobRes = await dbController.updateJob(jobId, job)
             .then(response => {
                 // Check if the client was found
                 if ((response.rowCount || 0) <= 0) {
@@ -318,7 +318,7 @@ export let api_functions = {
             });
 
         return {
-            id: jobId,
+            id: jobRes[0].id,
             message: "Job updated successfully"
         };
     },
@@ -327,7 +327,7 @@ export let api_functions = {
         if (!validUUID(jobId)) {
             throw new ErrorMessage(400, "Invalid Job ID").json();
         }
-        await dbController.deleteJob(jobId)
+        const jobRes = await dbController.deleteJob(jobId)
             .then(response => {
                 // Check if the job was found
                 if ((response.rowCount || 0) <= 0) {
@@ -344,6 +344,9 @@ export let api_functions = {
                 throw std_error.json();
             });
 
-        return { message: "Job deleted successfully" };
+        return {
+            id: jobRes[0].id,
+            message: "Job deleted successfully"
+        };
     }
 }
