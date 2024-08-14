@@ -1,5 +1,5 @@
-# CSC301 2024 Assignment 3
-Task 3 for CSC301 Full Stack Web Development. The app is a client-relations system which allows for the tracking of jobs associated with clients, including the state of those jobs and whether/how much the client has paid.
+# CRM App for Full Stack Web Development at Uni
+The app is a client-relations system which allows for the tracking of jobs associated with clients, including the state of those jobs and whether/how much the client has paid.
 
 ## Dependencies
 
